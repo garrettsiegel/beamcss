@@ -15,5 +15,5 @@
     "pack:check": "npm pack --dry-run"
   },
   "keywords": [],
-  "license": "UNLICENSED"
+  "license": "MIT"
 }
