@@ -1,7 +1,7 @@
 {
   "name": "beamcss",
   "version": "0.1.0",
-  "description": "Starter scaffold for the beamcss npm package.",
+  "description": "A CSS framework project with a Vite React front end.",
   "main": "./index.js",
   "exports": {
     ".": "./index.js"
@@ -11,9 +11,24 @@
     "README.md"
   ],
   "scripts": {
-    "check": "node --eval \"require('./index.js')\"",
+    "dev": "vite",
+    "build": "tsc -b && vite build",
+    "preview": "vite preview",
+    "typecheck": "tsc -b",
+    "check": "npm run typecheck",
     "pack:check": "npm pack --dry-run"
   },
   "keywords": [],
-  "license": "MIT"
+  "license": "MIT",
+  "dependencies": {
+    "react": "^19.2.6",
+    "react-dom": "^19.2.6"
+  },
+  "devDependencies": {
+    "@types/react": "^19.2.15",
+    "@types/react-dom": "^19.2.3",
+    "@vitejs/plugin-react": "^6.0.2",
+    "typescript": "^6.0.3",
+    "vite": "^8.0.13"
+  }
 }
