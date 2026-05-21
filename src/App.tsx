@@ -1,39 +1,17 @@
-const principles = [
-  'Composable tokens',
-  'Small, readable utilities',
-  'Framework-friendly output',
-]
-
 function App() {
   return (
     <main className="app-shell">
-      <section className="intro">
+      <section className="teaser" aria-label="beamcss coming soon">
         <p className="eyebrow">beamcss</p>
-        <h1>A front end for shaping a sharper CSS framework.</h1>
+        <div className="beam" aria-hidden="true">
+          <span />
+        </div>
+        <h1>Beam me up.</h1>
         <p className="lede">
-          Use this Vite React app as the public face for docs, demos, release notes,
-          and early experiments while the package API takes form.
+          A tiny CSS framework is materializing. The landing page got here first,
+          which is awkward, but promising.
         </p>
-        <div className="actions" aria-label="Primary actions">
-          <a href="https://vercel.com/docs" target="_blank" rel="noreferrer">
-            Vercel docs
-          </a>
-          <a href="https://vite.dev/guide/" target="_blank" rel="noreferrer">
-            Vite guide
-          </a>
-        </div>
-      </section>
-
-      <section className="panel" aria-label="Project focus">
-        <div>
-          <p className="panel-label">Current focus</p>
-          <h2>Build the framework, then let the site prove it.</h2>
-        </div>
-        <ul>
-          {principles.map((item) => (
-            <li key={item}>{item}</li>
-          ))}
-        </ul>
+        <p className="status">Coming soon. Probably with fewer pixels left behind.</p>
       </section>
     </main>
   )
