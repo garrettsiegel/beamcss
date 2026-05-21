@@ -114,10 +114,11 @@ p {
 }
 
 h1 {
-  max-width: 780px;
+  max-width: 100%;
   margin-bottom: 20px;
-  font-size: clamp(3.4rem, 12vw, 8.5rem);
+  font-size: clamp(3.1rem, 11.5vw, 8.5rem);
   line-height: 0.88;
+  white-space: nowrap;
 }
 
 .lede {
