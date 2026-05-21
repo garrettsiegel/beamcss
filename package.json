@@ -1,0 +1,19 @@
+{
+  "name": "beamcss",
+  "version": "0.1.0",
+  "description": "Starter scaffold for the beamcss npm package.",
+  "main": "./index.js",
+  "exports": {
+    ".": "./index.js"
+  },
+  "files": [
+    "index.js",
+    "README.md"
+  ],
+  "scripts": {
+    "check": "node --eval \"require('./index.js')\"",
+    "pack:check": "npm pack --dry-run"
+  },
+  "keywords": [],
+  "license": "UNLICENSED"
+}
