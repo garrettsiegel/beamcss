@@ -1,11 +1,17 @@
 {
   "files": [],
   "references": [
-    {
-      "path": "./tsconfig.app.json"
+{
+      "path": "./packages/beamcss"
     },
     {
-      "path": "./tsconfig.node.json"
+      "path": "./packages/vite"
+    },
+    {
+      "path": "./packages/postcss"
+    },
+    {
+      "path": "./packages/mcp"
     }
   ]
 }

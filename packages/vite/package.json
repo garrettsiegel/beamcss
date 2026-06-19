@@ -1,0 +1,35 @@
+{
+  "name": "@beamcss/vite",
+  "version": "0.0.0",
+  "description": "Vite plugin for Beam CSS.",
+  "type": "module",
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "default": "./dist/index.js"
+    }
+  },
+  "files": ["dist"],
+  "peerDependencies": {
+    "vite": ">=5"
+  },
+  "publishConfig": {
+    "access": "public"
+  },
+  "scripts": {
+    "build": "tsc -p tsconfig.json",
+    "typecheck": "tsc -p tsconfig.json --noEmit",
+    "test": "pnpm typecheck && pnpm build && node tests/vite-build.test.mjs",
+    "lint": "pnpm typecheck"
+  },
+  "license": "MIT",
+  "dependencies": {
+    "beamcss": "workspace:*"
+  },
+  "devDependencies": {
+    "typescript": "^6.0.3",
+    "vite": "^8.0.13"
+  }
+}

@@ -1,6 +1,11 @@
 node_modules/
 dist/
 .vite/
+target/
+fuzz/target/
+fuzz/artifacts/
+fuzz/corpus/
+packages/beamcss/native/*.node
 *.tsbuildinfo
 *.tgz
 npm-debug.log*

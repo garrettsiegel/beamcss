@@ -1,0 +1,64 @@
+{
+  "name": "beamcss",
+  "version": "0.1.0",
+  "description": "Rust-fast, utility-first CSS with focused class strings and zero scatter.",
+  "type": "module",
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "default": "./dist/index.js"
+    },
+    "./scanner": {
+      "types": "./dist/scanner.d.ts",
+      "default": "./dist/scanner.js"
+    },
+    "./cli-runner": {
+      "types": "./dist/cli-runner.d.ts",
+      "default": "./dist/cli-runner.js"
+    },
+    "./native": {
+      "types": "./dist/native.d.ts",
+      "default": "./dist/native.js"
+    },
+    "./codemod": {
+      "types": "./dist/codemod.d.ts",
+      "default": "./dist/codemod.js"
+    },
+    "./language": {
+      "types": "./dist/language.d.ts",
+      "default": "./dist/language.js"
+    }
+  },
+  "bin": {
+    "beam": "./dist/cli.js"
+  },
+  "files": [
+    "dist",
+    "native",
+    "README.md"
+  ],
+  "scripts": {
+    "build": "tsc -p tsconfig.json",
+    "build:native": "cargo build -p beam_node --release && node scripts/copy-native.mjs",
+    "stage:native": "node scripts/stage-native-artifacts.mjs",
+    "typecheck": "tsc -p tsconfig.json --noEmit",
+    "test": "pnpm typecheck && pnpm build && node tests/codemod.test.mjs",
+    "lint": "pnpm typecheck",
+    "pack:check": "npm pack --dry-run --cache /tmp/beamcss-npm-cache"
+  },
+  "keywords": [
+    "css",
+    "atomic-css",
+    "utility-css"
+  ],
+  "license": "MIT",
+  "devDependencies": {
+    "@types/node": "^24.10.1",
+    "typescript": "^6.0.3"
+  },
+  "dependencies": {
+    "json5": "^2.2.3"
+  }
+}

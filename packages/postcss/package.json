@@ -1,0 +1,35 @@
+{
+  "name": "@beamcss/postcss",
+  "version": "0.0.0",
+  "description": "PostCSS plugin for Beam CSS.",
+  "type": "module",
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "default": "./dist/index.js"
+    }
+  },
+  "files": ["dist"],
+  "peerDependencies": {
+    "postcss": ">=8"
+  },
+  "publishConfig": {
+    "access": "public"
+  },
+  "scripts": {
+    "build": "tsc -p tsconfig.json",
+    "typecheck": "tsc -p tsconfig.json --noEmit",
+    "test": "pnpm typecheck && pnpm build && node tests/postcss-build.test.mjs",
+    "lint": "pnpm typecheck"
+  },
+  "license": "MIT",
+  "dependencies": {
+    "beamcss": "workspace:*"
+  },
+  "devDependencies": {
+    "postcss": "^8.5.6",
+    "typescript": "^6.0.3"
+  }
+}

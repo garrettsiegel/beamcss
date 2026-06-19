@@ -1,0 +1,74 @@
+<main class="stack(gap-6) p-6 bg-base fg-fg font-ui min-h-screen">
+  <header class="stack(gap-4) tablet:row(between center)">
+    <section class="stack(gap-2)">
+      <p class="text-sm fg-accent">beamcss dogfood</p>
+      <h1 class="text-xl fg-fg">Launch console</h1>
+      <p class="text-base fg-muted max-w-[42rem]">
+        A compact dashboard built with Beam primitives, grouped variants, arbitrary values, and responsive variants.
+      </p>
+    </section>
+    <nav class="cluster(gap-2)">
+      <a class="px-4 py-2 round-md bg-panel fg-fg hover:(bg-panel+8 scale-105)" href="#">
+        Docs
+      </a>
+      <a class="px-4 py-2 round-md bg-accent fg-on-accent hover:(bg-accent+12 scale-105)" href="#">
+        Deploy
+      </a>
+    </nav>
+  </header>
+
+  <section class="grid(cols-1 tablet:cols-3 gap-4)">
+    <article class="stack(gap-2) p-4 bg-surface round-lg border bd-line">
+      <p class="text-sm fg-muted">Build time</p>
+      <strong class="text-xl fg-success">38ms</strong>
+      <p class="text-sm fg-muted">Latest local run</p>
+    </article>
+    <article class="stack(gap-2) p-4 bg-surface round-lg border bd-line">
+      <p class="text-sm fg-muted">Output</p>
+      <strong class="text-xl fg-accent">7 atoms</strong>
+      <p class="text-sm fg-muted">Deduped utilities</p>
+    </article>
+    <article class="stack(gap-2) p-4 bg-surface round-lg border bd-line">
+      <p class="text-sm fg-muted">Fuzz</p>
+      <strong class="text-xl fg-warning">1k runs</strong>
+      <p class="text-sm fg-muted">Parser smoke pass</p>
+    </article>
+  </section>
+
+  <section class="grid(cols-1 desktop:cols-[2fr_1fr] gap-4)">
+    <article class="stack(gap-4) p-4 bg-surface round-lg border bd-line">
+      <div class="row(between center)">
+        <h2 class="text-lg">Pipeline</h2>
+        <span class="px-2 py-1 round-full bg-success/22 fg-success text-sm">
+          green
+        </span>
+      </div>
+      <div class="stack(gap-3)">
+        <div class="row(between center) p-3 bg-panel round-md">
+          <span class="fg-muted">Parse grouped variants</span>
+          <strong class="fg-success">done</strong>
+        </div>
+        <div class="row(between center) p-3 bg-panel round-md">
+          <span class="fg-muted">Emit cascade layers</span>
+          <strong class="fg-success">done</strong>
+        </div>
+        <div class="row(between center) p-3 bg-panel round-md">
+          <span class="fg-muted">Wire Vite HMR</span>
+          <strong class="fg-accent">next</strong>
+        </div>
+      </div>
+    </article>
+
+    <aside class="stack(gap-4) p-4 bg-surface round-lg border bd-line">
+      <h2 class="text-lg">Runtime vars</h2>
+      <div class="stack(gap-2)">
+        <div class="h-[10px] round-full bg-panel">
+          <div class="h-[10px] w-(--progress) round-full bg-accent" style="--progress:72%"></div>
+        </div>
+        <p class="text-sm fg-muted">
+          Dynamic values compile once and read CSS variables at runtime.
+        </p>
+      </div>
+    </aside>
+  </section>
+</main>

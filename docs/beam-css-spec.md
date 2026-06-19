@@ -4,7 +4,7 @@
 
 This document specifies the **author-time syntax** and how it compiles. Two ideas carry the whole DX:
 
-1. **Variant grouping** — factor repeated prefixes out of the class string (`hover:(...)`, `md:(...)`), so markup reads as grouped intent instead of soup.
+1. **Variant grouping** — factor repeated prefixes out of the class string (`hover:(...)`, `tablet:(...)`), so markup reads as grouped intent instead of soup.
 2. **Layout primitives** — a tiny vocabulary (`stack`, `row`, `grid`, `cluster`, `place`) that collapses the layout incantations you write a hundred times a day.
 
 Everything you write is author-time sugar. The compiler unfolds it to plain atomic classes, dedupes them globally, tree-shakes, and emits native CSS under cascade layers. Nothing in this syntax survives to runtime as a runtime cost.
@@ -30,8 +30,8 @@ import { defineConfig } from 'beamcss'
 
 export default defineConfig({
   tokens: {
-    // index-based scale: `gap-4` -> space[4]
-    space: [0, '0.25rem', '0.5rem', '0.75rem', '1rem', '1.5rem', '2rem', '3rem', '4rem'],
+    // optional named spacing tokens; numeric spacing like `gap-4` is 4px
+    space: { card: '1rem', section: '2rem' },
     color: {
       base: '#0b0b0c', surface: '#16161a', fg: '#e8e8ea',
       muted: '#6b7280', accent: '#3b82f6', 'on-accent': '#ffffff',
@@ -39,7 +39,12 @@ export default defineConfig({
     radius: { sm: '4px', md: '8px', lg: '16px', full: '9999px' },
     text:   { sm: '14px', base: '16px', lg: '20px', xl: '28px' },
     font:   { ui: 'Inter, system-ui, sans-serif', mono: 'ui-monospace, monospace' },
-    screens:{ sm: '40rem', md: '48rem', lg: '64rem', xl: '80rem' },
+    screens:{
+      tablet: '48rem',
+      desktop: '64rem',
+      wide: '80rem',
+      'mobile-landscape': '(max-width:47.999rem) and (orientation:landscape)',
+    },
   },
 })
 ```
@@ -49,7 +54,7 @@ Compiles to:
 ```css
 @layer beam.tokens {
   :root {
-    --space-4: 1rem; --space-6: 2rem;
+    --space-card: 1rem; --space-section: 2rem;
     --color-surface: #16161a; --color-accent: #3b82f6;
     --radius-md: 8px; --text-lg: 20px;
   }
@@ -80,18 +85,18 @@ Output layer order is fixed for deterministic specificity — you never fight `!
 @layer beam.reset, beam.tokens, beam.base, beam.utilities;
 ```
 
-Every atom is one class / one declaration, reused everywhere. `gap-4` emits `.gap-4{gap:var(--space-4)}` exactly once no matter how many elements or groups reference it.
+Every atom is one class / one declaration, reused everywhere. `gap-4` emits `.gap-4{gap:4px}` exactly once no matter how many elements or groups reference it.
 
 ---
 
 ## 4. Atomic utilities
 
-Form: `base` or `base-value`, where `value` is a token step (number), a token name, or an arbitrary value (§7).
+Form: `base` or `base-value`, where numeric spacing values are pixels, named values resolve through tokens, and arbitrary values use brackets (§7).
 
 | Concern | Prefix | Example | Compiles to |
 |---|---|---|---|
-| Padding / margin | `p m` (+ `t r b l x y`) | `px-4 mt-2` | `padding-inline:var(--space-4)` |
-| Gap | `gap` (+ `gap-x gap-y`) | `gap-4` | `gap:var(--space-4)` |
+| Padding / margin | `p m` (+ `t r b l x y`) | `px-4 mt-2` | `padding-inline:4px` |
+| Gap | `gap` (+ `gap-x gap-y`) | `gap-4` | `gap:4px` |
 | Size | `w h` (+ `min- max-`) | `w-full h-screen` | `width:100%` |
 | **Text color** | `fg` | `fg-muted` | `color:var(--color-muted)` |
 | Background | `bg` | `bg-surface` | `background:var(--color-surface)` |
@@ -128,18 +133,18 @@ Both compile to identical atoms. The group is read-time sugar that unfolds to `h
 **Stacking** variants — all conditions must hold; read outer→inner:
 
 ```
-md:dark:(bg-base fg-muted)        ->  at >=md AND dark: those atoms
+tablet:dark:(bg-base fg-muted)    ->  at >=tablet AND dark: those atoms
 ```
 
 **Nesting** groups — a group may contain further variants/groups:
 
 ```
-md:(p-6 round-lg hover:(bg-surface scale-[1.02]))
+tablet:(p-6 round-lg hover:(bg-surface scale-[1.02]))
 ```
 
-Unfolds to: `md:p-6`, `md:round-lg`, `md:hover:bg-surface`, `md:hover:scale-[1.02]`.
+Unfolds to: `tablet:p-6`, `tablet:round-lg`, `tablet:hover:bg-surface`, `tablet:hover:scale-[1.02]`.
 
-This removes the single biggest source of class soup: the repeated `hover:…hover:…hover:` / `md:…md:…` prefix sprawl.
+This removes the single biggest source of class soup: the repeated `hover:…hover:…hover:` / `tablet:…tablet:…` prefix sprawl.
 
 ---
 
@@ -180,8 +185,8 @@ A primitive is a class that sets a layout *intent*. It takes modifiers in parens
 <!-- wrapping chip group -->
 <div class="cluster(gap-2)">…</div>
 
-<!-- responsive grid: 1 col on mobile, 3 from md -->
-<div class="grid(cols-1 md:cols-3 gap-6)">…</div>
+<!-- responsive grid: 1 col on mobile, 3 from tablet -->
+<div class="grid(cols-1 tablet:cols-3 gap-6)">…</div>
 
 <!-- perfectly centered hero -->
 <section class="place h-screen">…</section>
@@ -190,7 +195,7 @@ A primitive is a class that sets a layout *intent*. It takes modifiers in parens
 Primitives compose freely with atoms, grouping, and responsive variants on the same element:
 
 ```html
-<article class="stack(gap-4) p-6 bg-surface round-lg md:row(between center)">
+<article class="stack(gap-4) p-6 bg-surface round-lg tablet:row(between center)">
 ```
 
 This is the everyday shape of Beam markup: one or two primitives carrying the layout, a few atoms for spacing/color, the occasional grouped variant. Compare:
@@ -200,19 +205,19 @@ Tailwind:
 <div class="flex flex-col items-center gap-4 p-6 rounded-lg bg-zinc-900 hover:bg-zinc-800 md:flex-row md:items-center md:justify-between">
 
 Beam:
-<div class="stack(center gap-4) p-6 round-lg bg-surface hover:bg-base md:row(between center)">
+<div class="stack(center gap-4) p-6 round-lg bg-surface hover:bg-base tablet:row(between center)">
 ```
 
 ---
 
 ## 7. Values: static, arbitrary, and dynamic
 
-**Token step / name** (the common case): `gap-4`, `bg-surface`.
+**Literal / token name** (the common case): `gap-4` is `4px`; `gap-section` and `bg-surface` read tokens.
 
 **Static arbitrary** (escape hatch, compiled once): square brackets.
 
 ```
-w-[347px]   round-[10px]   grid(cols-[200px_1fr])
+w-[347px]   round-[10px]   bg-[oklch(72%_0.14_240)]   grid(cols-[200px_1fr])
 ```
 
 **Dynamic / runtime** — the thing Tailwind fumbles. A utility can read a CSS custom property via `(--name)`; you set the property at runtime. The class is stable and atomic regardless of the value, so there's no safelist and no class-string concatenation.
@@ -245,11 +250,11 @@ classlist   = token { WS token } ;
 token       = primitive | group | utility ;
 
 primitive   = name "(" classlist ")" ;          (* stack(center gap-4)        *)
-group       = variant-chain "(" classlist ")" ;  (* md:hover:(bg-accent fg-base)*)
-utility     = [ variant-chain ] base ;           (* md:p-6, p-6                *)
+group       = variant-chain "(" classlist ")" ;  (* tablet:hover:(bg-accent fg-base)*)
+utility     = [ variant-chain ] base ;           (* tablet:p-6, p-6            *)
 
-variant-chain = variant { ":" variant } ":" ;    (* md:dark:hover:             *)
-variant     = ident | arbitrary-selector ;       (* hover, md, [&>svg]         *)
+variant-chain = variant { ":" variant } ":" ;    (* tablet:dark:hover:         *)
+variant     = ident | arbitrary-selector ;       (* hover, tablet, [&>svg]     *)
 
 base        = ident [ "-" value ]                 (* p-4, bg-surface, w-full    *)
             | ident "-(" cssvar ")" ;             (* w-(--w)  -> dynamic        *)
@@ -262,13 +267,13 @@ cssvar      = "--" ident ;
 **Worked unfold:**
 
 ```
-md:(p-6 hover:(bg-surface round-lg))
+tablet:(p-6 hover:(bg-surface round-lg))
 ```
 →
 ```
-md:p-6
-md:hover:bg-surface
-md:hover:round-lg
+tablet:p-6
+tablet:hover:bg-surface
+tablet:hover:round-lg
 ```
 
 ```
@@ -278,7 +283,7 @@ row(between center gap-2)
 ```
 justify-between   ->  justify-content:space-between
 items-center      ->  align-items:center
-gap-2             ->  gap:var(--space-2)
+gap-2             ->  gap:2px
 ```
 
 ---
@@ -294,11 +299,10 @@ gap-2             ->  gap:var(--space-2)
 
 ## 10. Open decisions to settle before building
 
-1. **Spacing scale shape** — index array (`gap-4` = `space[4]`) vs. named keys. Array is terser; named is more self-documenting. Leaning array.
-2. **Primitive base specificity** — do primitives live in `beam.base` or `beam.utilities`? Affects whether an atom can override a primitive default on the same element. Recommend `beam.base` so atoms always win.
-3. **Group delimiter** — parens `()` (proposed) vs. brackets. Parens read best but must be escaped in generated class names; confirm the escaping scheme is bundler-safe.
-4. **Arbitrary value separator inside grid** — underscore (`cols-[200px_1fr]`) follows Tailwind; keep for familiarity.
-5. **How dynamic `(--w)` interacts with SSR/streaming** — inline `style` is fine everywhere; document the pattern per framework.
+1. **Primitive base specificity** — do primitives live in `beam.base` or `beam.utilities`? Affects whether an atom can override a primitive default on the same element. Recommend `beam.base` so atoms always win.
+2. **Group delimiter** — parens `()` (proposed) vs. brackets. Parens read best but must be escaped in generated class names; confirm the escaping scheme is bundler-safe.
+3. **Arbitrary value separator inside grid** — underscore (`cols-[200px_1fr]`) follows Tailwind; keep for familiarity.
+4. **How dynamic `(--w)` interacts with SSR/streaming** — inline `style` is fine everywhere; document the pattern per framework.
 
 ---
 

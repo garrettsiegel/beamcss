@@ -1,0 +1,15 @@
+[workspace]
+members = [
+  "crates/beam_cli",
+  "crates/beam_core",
+  "crates/beam_node",
+]
+resolver = "2"
+
+[workspace.package]
+edition = "2021"
+license = "MIT"
+repository = "https://github.com/beamcss/beamcss"
+
+[workspace.lints.rust]
+unsafe_code = "forbid"

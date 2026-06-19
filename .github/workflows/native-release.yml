@@ -1,0 +1,87 @@
+name: Native Release
+
+on:
+  workflow_dispatch:
+  push:
+    tags:
+      - "v*"
+
+permissions:
+  contents: read
+  id-token: write
+
+jobs:
+  native-artifacts:
+    name: Build ${{ matrix.native_tag }}
+    runs-on: ${{ matrix.os }}
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - os: macos-latest
+            native_tag: darwin-arm64
+          - os: macos-13
+            native_tag: darwin-x64
+          - os: ubuntu-latest
+            native_tag: linux-x64-gnu
+          - os: windows-latest
+            native_tag: win32-x64-msvc
+    steps:
+      - uses: actions/checkout@v4
+      - uses: pnpm/action-setup@v4
+        with:
+          version: 10.13.1
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: pnpm
+      - uses: dtolnay/rust-toolchain@stable
+      - uses: Swatinem/rust-cache@v2
+      - run: pnpm install --frozen-lockfile
+      - run: pnpm --filter beamcss build
+      - run: cargo build -p beam_node --release
+      - run: node packages/beamcss/scripts/copy-native.mjs
+        env:
+          BEAM_NATIVE_TAG: ${{ matrix.native_tag }}
+      - uses: actions/upload-artifact@v4
+        with:
+          name: beam-node-${{ matrix.native_tag }}
+          path: packages/beamcss/native/beam_node.${{ matrix.native_tag }}.node
+          if-no-files-found: error
+
+  publish:
+    name: Publish npm packages
+    needs: native-artifacts
+    runs-on: ubuntu-latest
+    if: github.event_name == 'workflow_dispatch' || startsWith(github.ref, 'refs/tags/v')
+    steps:
+      - uses: actions/checkout@v4
+      - uses: pnpm/action-setup@v4
+        with:
+          version: 10.13.1
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: pnpm
+          registry-url: https://registry.npmjs.org
+      - uses: dtolnay/rust-toolchain@stable
+      - uses: actions/download-artifact@v4
+        with:
+          pattern: beam-node-*
+          path: native-artifacts
+      - run: pnpm install --frozen-lockfile
+      - run: pnpm -r build
+      - run: pnpm --filter beamcss stage:native -- native-artifacts
+      - run: pnpm --filter beamcss pack:check
+      - run: pnpm --filter beamcss publish --access public --provenance --no-git-checks
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+      - run: pnpm --filter @beamcss/vite publish --access public --provenance --no-git-checks
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+      - run: pnpm --filter @beamcss/postcss publish --access public --provenance --no-git-checks
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+      - run: pnpm --filter @beamcss/mcp publish --access public --provenance --no-git-checks
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}

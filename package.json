@@ -1,34 +1,24 @@
 {
-  "name": "beamcss",
+  "name": "beamcss-monorepo",
+  "private": true,
   "version": "0.1.0",
-  "description": "A CSS framework project with a Vite React front end.",
-  "main": "./index.js",
-  "exports": {
-    ".": "./index.js"
-  },
-  "files": [
-    "index.js",
-    "README.md"
-  ],
+  "description": "Beam CSS monorepo: focused styles, zero scatter.",
+  "packageManager": "pnpm@10.13.1",
   "scripts": {
-    "dev": "vite",
-    "build": "tsc -b && vite build",
-    "preview": "vite preview",
-    "typecheck": "tsc -b",
-    "check": "npm run typecheck",
-    "pack:check": "npm pack --dry-run"
+    "build": "pnpm -r build && cargo build --workspace",
+    "test": "pnpm -r test && cargo test --workspace",
+    "typecheck": "pnpm -r typecheck",
+    "lint": "pnpm -r lint",
+    "audit": "pnpm audit --audit-level moderate && cargo audit",
+    "security:package-scripts": "node scripts/check-package-scripts.mjs",
+    "check": "pnpm typecheck && pnpm test",
+    "benchmark": "node benchmarks/build-times.mjs"
   },
   "keywords": [],
   "license": "MIT",
-  "dependencies": {
-    "react": "^19.2.6",
-    "react-dom": "^19.2.6"
-  },
   "devDependencies": {
-    "@types/react": "^19.2.15",
-    "@types/react-dom": "^19.2.3",
-    "@vitejs/plugin-react": "^6.0.2",
-    "typescript": "^6.0.3",
-    "vite": "^8.0.13"
+    "@tailwindcss/cli": "^4.1.13",
+    "tailwindcss": "^4.1.13",
+    "typescript": "^6.0.3"
   }
 }

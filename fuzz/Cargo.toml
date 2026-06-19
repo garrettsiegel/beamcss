@@ -1,0 +1,21 @@
+[package]
+name = "beam-fuzz"
+version = "0.0.0"
+publish = false
+edition = "2021"
+
+[package.metadata]
+cargo-fuzz = true
+
+[workspace]
+
+[dependencies]
+beam_core = { path = "../crates/beam_core" }
+libfuzzer-sys = "0.4"
+
+[[bin]]
+name = "classlist_parser"
+path = "fuzz_targets/classlist_parser.rs"
+test = false
+doc = false
+bench = false
