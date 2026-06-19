@@ -80,7 +80,7 @@ jobs:
           path: native-artifacts
       - run: pnpm install --frozen-lockfile
       - run: pnpm -r build
-      - run: pnpm --filter beamcss stage:native -- native-artifacts
+      - run: node packages/beamcss/scripts/stage-native-artifacts.mjs native-artifacts
       - run: pnpm --filter beamcss pack:check
       - run: pnpm --filter beamcss publish --access public --provenance --no-git-checks
         env:
