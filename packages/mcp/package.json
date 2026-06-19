@@ -1,6 +1,6 @@
 {
   "name": "@beamcss/mcp",
-  "version": "0.0.0",
+  "version": "0.1.0",
   "description": "MCP server for Beam CSS.",
   "type": "module",
   "main": "./dist/index.js",
