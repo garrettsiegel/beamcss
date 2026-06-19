@@ -121,13 +121,17 @@ if (!repoRoot) {
 
 const result = spawnSync("cargo", ["run", "-p", "beam_cli", "--bin", "beam", "--", ...args], {
   cwd: repoRoot,
-  stdio: "inherit",
+  stdio: ["inherit", "pipe", "pipe"],
+  encoding: "utf8",
 })
 
 if (result.error) {
   console.error(`beam: failed to run Rust CLI: ${result.error.message}`)
   process.exit(1)
 }
+
+if (result.stdout) process.stdout.write(result.stdout)
+if (result.stderr) process.stderr.write(result.stderr)
 
 process.exit(result.status ?? 1)
 
