@@ -1,6 +1,6 @@
 {
   "name": "beamcss",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "Rust-fast, utility-first CSS with focused class strings and zero scatter.",
   "type": "module",
   "main": "./dist/index.js",

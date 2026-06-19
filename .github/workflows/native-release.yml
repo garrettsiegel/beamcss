@@ -20,8 +20,9 @@ jobs:
         include:
           - os: macos-latest
             native_tag: darwin-arm64
-          - os: macos-13
+          - os: macos-latest
             native_tag: darwin-x64
+            rust_target: x86_64-apple-darwin
           - os: ubuntu-latest
             native_tag: linux-x64-gnu
           - os: windows-latest
@@ -36,10 +37,18 @@ jobs:
           node-version: 24
           cache: pnpm
       - uses: dtolnay/rust-toolchain@stable
+        with:
+          targets: ${{ matrix.rust_target }}
       - uses: Swatinem/rust-cache@v2
       - run: pnpm install --frozen-lockfile
       - run: pnpm --filter beamcss build
-      - run: cargo build -p beam_node --release
+      - run: cargo build -p beam_node --release ${{ matrix.rust_target && format('--target {0}', matrix.rust_target) || '' }}
+      - name: Stage cross-compiled artifact
+        if: matrix.rust_target != ''
+        shell: bash
+        run: |
+          mkdir -p target/release
+          find target/${{ matrix.rust_target }}/release -maxdepth 1 \( -name "libbeam_node.*" -o -name "beam_node.dll" \) -exec cp {} target/release/ \;
       - run: node packages/beamcss/scripts/copy-native.mjs
         env:
           BEAM_NATIVE_TAG: ${{ matrix.native_tag }}
