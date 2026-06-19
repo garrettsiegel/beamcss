@@ -4,7 +4,7 @@ import { fileURLToPath } from "node:url"
 
 const packageDir = dirname(dirname(fileURLToPath(import.meta.url)))
 const nativeDir = resolve(packageDir, "native")
-const sourceDir = resolve(process.argv[2] ?? "native-artifacts")
+const sourceDir = resolve(process.argv.slice(2).find((a) => a !== "--") ?? "native-artifacts")
 const expectedArtifacts = new Set([
   "beam_node.darwin-arm64.node",
   "beam_node.darwin-x64.node",
