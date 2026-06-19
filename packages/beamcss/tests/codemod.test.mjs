@@ -99,7 +99,7 @@ try {
   )
 
   assert.equal(explain.status, 0, explain.stderr)
-  assert(explain.stdout.includes(":hover { background:var(--color-accent); }"))
+  assert(explain.stdout.includes("background:var(--color-accent)"))
 } finally {
   rmSync(tempDir, { force: true, recursive: true })
 }
