@@ -44,7 +44,7 @@
 
 - [x] **Slice 1 — walking skeleton.** Load `beam.config.ts` tokens → parse a flat list of basic utilities (`p-4`, `bg-surface`, `gap-2`) → emit atomic CSS under `@layer` with deduping. End to end, even if tiny.
 - [x] **Slice 2 — the grammar.** Implement the full parser from spec §8: variants, the `variant:(...)` **grouping** unfold, nesting, and stacking. This is the signature feature — get it right.
-- [x] **Slice 3 — layout primitives.** `stack`, `row`, `cluster`, `grid`, `place` with their modifier vocabulary and documented defaults (spec §6).
+- [x] **Slice 3 — layout utilities.** `flex`, `grid`, direction, alignment, wrapping, track, and centering utilities with grouped variants and utility grouping.
 - [x] **Slice 4 — values.** Literal numeric spacing, token names, static arbitrary `[…]`, and dynamic `(--var)` → `var()`.
 - [x] **Slice 5 — output pipeline.** Cascade-layer ordering, global dedup, tree-shaking to used atoms, modern-CSS transpile + minify for target browsers.
 - [x] **Fuzz the parser from day one** (cargo-fuzz). It must never panic or hang on malformed/pathological input. Cap input sizes. Target `#![forbid(unsafe_code)]`.
@@ -78,7 +78,7 @@
 
 - [ ] **Test suite:** output snapshots, grammar edge cases, per-framework integration tests.
   - [x] Core compiler output snapshot for representative Beam markup.
-  - [x] Parser edge cases for malformed groups, variant chains, and unknown primitives.
+  - [x] Parser edge cases for malformed groups, variant chains, and unknown groups.
   - [x] Vite plugin build integration test.
   - [x] PostCSS plugin integration test.
   - [ ] Per-framework integration tests.
@@ -107,7 +107,7 @@
   - [x] Full syntax reference page.
   - [x] Hero visual direction: explore a CodePen-style animated grid/glow effect inspired by https://codepen.io/the_linkindevil/pen/YzoOMyW.
 - [x] **`llms.txt` + `llms-full.txt`** — the thing Tailwind declined. One-fetch, complete, machine-readable docs.
-- [x] **`@beamcss/mcp`** — agent server exposing tokens, primitives, and component scaffolding live.
+- [x] **`@beamcss/mcp`** — agent server exposing tokens, utilities, and component scaffolding live.
 - [x] **Tailwind → Beam codemod** — maps atoms and folds repeated prefixes into groups. Single biggest adoption lever.
 - [ ] **Editor extension / LSP** — hover-to-resolved-CSS, autocomplete from your tokens. Docs that live in the editor.
   - [x] Token-aware completion and hover helper API for future editor/LSP integrations.
@@ -123,7 +123,6 @@
 
 - [ ] Stand up the **coming-soon / waitlist** page (the social teasers point here).
   - [x] Add a launch-focused waitlist section to `beamcss.dev`.
-  - [x] Add launch positioning and growth plan in `docs/marketing-plan.md`.
 - [ ] **0.x public release** + Show HN / dev-community launch once the dogfood app and benchmarks are solid.
   - [x] Release checklist and changelog scaffold.
 - [ ] Execute the **growth plan** (positioning, content/AIO engine, first true believers, growth loops).
@@ -146,7 +145,7 @@
 ## Open decisions to settle (from spec §10)
 
 1. Spacing scale: index array vs named keys — **resolved: index array**.
-2. Primitive base specificity: `beam.base` vs `beam.utilities` — **resolved: primitive output emits in `beam.base` so atoms win**.
+2. Utility grouping specificity: grouped utilities emit in `beam.utilities`, so normal cascade and source-independent dedupe remain predictable.
 3. Group delimiter `()` escaping scheme — parser and selector escaping are implemented; bundler integration still needs real-plugin validation.
 4. Dynamic `(--var)` patterns under SSR/streaming — document per framework.
 

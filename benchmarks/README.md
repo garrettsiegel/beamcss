@@ -27,7 +27,7 @@ BEAM_BENCH_KEEP=1 pnpm benchmark
 
 Notes:
 
-- The Beam fixture uses Beam primitives and grouped variants.
+- The Beam fixture uses Beam utilities and grouped variants.
 - The Tailwind fixture uses analogous Tailwind utility classes, not a byte-for-byte
   semantic clone.
 - Cold dependency install time is not measured.

@@ -19,7 +19,7 @@ try {
 
 export default defineConfig({
   tokens: {
-    space: { card: "1rem" },
+    spacing: { card: "1rem" },
     color: {
       accent: "#3b82f6",
       base: "#0b0b0c",
@@ -36,7 +36,7 @@ export default defineConfig({
   )
   await writeFile(
     join(tempDir, "index.html"),
-    `<main class="stack(center gap-4) p-4 bg-surface hover:(bg-accent fg-fg) tablet:text-lg">Beam</main>`,
+    `<main class="flex direction-column align-center gap-4 p-4 bg-surface hover:(bg-accent text-fg) tablet:text-lg">Beam</main>`,
   )
 
   await build({
@@ -54,9 +54,10 @@ export default defineConfig({
 
   assertIncludes(html, '<style data-beamcss="">')
   assertIncludes(html, "@layer beam.reset, beam.tokens, beam.base, beam.utilities;")
-  assertIncludes(html, ".stack\\(center.gap-4\\){display:flex;}")
+  assertIncludes(html, ".flex{display:flex;}")
+  assertIncludes(html, ".align-center{align-items:center;}")
   assertIncludes(html, ".p-4{padding:4px;}")
-  assertIncludes(html, ".hover\\:\\(bg-accent.fg-fg\\):hover{background:var(--color-accent);}")
+  assertIncludes(html, ".hover\\:\\(bg-accent.text-fg\\):hover{background:var(--color-accent);}")
   assertIncludes(html, "@media (min-width:48rem){.tablet\\:text-lg{font-size:var(--text-lg);}}")
 } finally {
   await rm(tempDir, { force: true, recursive: true })

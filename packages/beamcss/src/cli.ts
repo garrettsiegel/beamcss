@@ -83,7 +83,9 @@ if (loadNativeBinding() && args[0] === "explain") {
   try {
     const className = args[1]
     if (!className) {
-      console.error('beam: explain expects a class string, for example `beam explain "stack(gap-4)"`')
+      console.error(
+        'beam: explain expects a class string, for example `beam explain "flex direction-column gap-4"`',
+      )
       process.exit(1)
     }
     const config = loadConfigSync(optionValue(args, "--config") ?? "beam.config.ts")

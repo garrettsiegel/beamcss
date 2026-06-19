@@ -5,7 +5,7 @@
 This document specifies the **author-time syntax** and how it compiles. Two ideas carry the whole DX:
 
 1. **Variant grouping** — factor repeated prefixes out of the class string (`hover:(...)`, `tablet:(...)`), so markup reads as grouped intent instead of soup.
-2. **Layout primitives** — a tiny vocabulary (`stack`, `row`, `grid`, `cluster`, `place`) that collapses the layout incantations you write a hundred times a day.
+2. **CSS-first utilities and config composition** — readable utility names (`flex`, `justify-center`, `rounded-md`) plus shortcuts, recipes, presets, and utility modules for design-system scale.
 
 Everything you write is author-time sugar. The compiler unfolds it to plain atomic classes, dedupes them globally, tree-shakes, and emits native CSS under cascade layers. Nothing in this syntax survives to runtime as a runtime cost.
 
@@ -13,10 +13,10 @@ Everything you write is author-time sugar. The compiler unfolds it to plain atom
 
 ## 1. Design principles
 
-- **Familiar first.** Reuse Tailwind's atomic vocabulary (`p-4`, `gap-2`, `round-md`) so switching cost is near zero. The new surface is the *grouping* and the *primitives*, not a relearned dictionary.
+- **Familiar first.** Reuse CSS vocabulary (`p-4`, `gap-2`, `rounded-md`, `justify-center`) so switching cost is low without cryptic aliases.
 - **The string should read.** A long Beam class list reads as a handful of grouped clauses, not 18 space-separated atoms.
 - **Tokens are numbers or names.** A spacing step is a number (`gap-4`), a semantic value is a name (`bg-surface`). Nothing else.
-- **No overloaded prefixes.** Color and size never share a prefix (see §4).
+- **CSS-first over shorthand.** Prefer `text-muted`, `border-line`, `rounded-md`, and `align-center` over abbreviated prefixes.
 - **Atomic underneath.** Author sugar; ship atoms.
 
 ---
@@ -31,7 +31,7 @@ import { defineConfig } from 'beamcss'
 export default defineConfig({
   tokens: {
     // optional named spacing tokens; numeric spacing like `gap-4` is 4px
-    space: { card: '1rem', section: '2rem' },
+    spacing: { card: '1rem', section: '2rem' },
     color: {
       base: '#0b0b0c', surface: '#16161a', fg: '#e8e8ea',
       muted: '#6b7280', accent: '#3b82f6', 'on-accent': '#ffffff',
@@ -45,6 +45,24 @@ export default defineConfig({
       wide: '80rem',
       'mobile-landscape': '(max-width:47.999rem) and (orientation:landscape)',
     },
+  },
+  shortcuts: {
+    card: 'flex direction-column gap-4 p-card bg-surface rounded-md',
+  },
+  recipes: {
+    button: {
+      base: 'px-4 py-2 rounded-md',
+      variants: {
+        primary: 'bg-accent text-on-accent',
+      },
+    },
+  },
+  utilities: {
+    layout: true,
+    spacing: true,
+    colors: true,
+    typography: true,
+    effects: true,
   },
 })
 ```
@@ -75,7 +93,7 @@ themes: { dark: { color: { base: '#0b0b0c', fg: '#e8e8ea' } } }
 The Rust engine scans source for class strings and runs four passes:
 
 1. **Parse** the class string against the grammar in §8.
-2. **Unfold** groups and primitives into a flat list of `(variant-chain, atom)` pairs.
+2. **Unfold** groups, utility groups, shortcuts, and recipes into a flat list of `(variant-chain, atom)` pairs.
 3. **Emit** one atomic CSS rule per unique pair, under cascade layers, deduped globally and tree-shaken to only what's used.
 4. **Transpile + minify** for the target browsers (nesting, `color-mix`, logical props, prefixing).
 
@@ -98,17 +116,17 @@ Form: `base` or `base-value`, where numeric spacing values are pixels, named val
 | Padding / margin | `p m` (+ `t r b l x y`) | `px-4 mt-2` | `padding-inline:4px` |
 | Gap | `gap` (+ `gap-x gap-y`) | `gap-4` | `gap:4px` |
 | Size | `w h` (+ `min- max-`) | `w-full h-screen` | `width:100%` |
-| **Text color** | `fg` | `fg-muted` | `color:var(--color-muted)` |
+| Text color | `text` | `text-muted` | `color:var(--color-muted)` |
 | Background | `bg` | `bg-surface` | `background:var(--color-surface)` |
-| Border color | `bd` | `bd-accent` | `border-color:var(--color-accent)` |
-| **Font size** | `text` | `text-lg` | `font-size:var(--text-lg)` |
+| Border color | `border` | `border-accent` | `border-color:var(--color-accent)` |
+| Font size | `text` | `text-lg` | `font-size:var(--text-lg)` |
 | Font weight | `font` | `font-medium` | `font-weight:500` |
-| Radius | `round` | `round-md` | `border-radius:var(--radius-md)` |
+| Radius | `rounded` | `rounded-md` | `border-radius:var(--radius-md)` |
 | Border width | `border` | `border border-2` | `border-width:1px` |
 
-> **Deliberate Beam fix:** color and size never share a prefix. `fg-*` is text *color*, `text-*` is font *size*, `bd-*` is border *color*, `border-*` is border *width*. Tailwind overloads `text-` for both color and size; Beam doesn't, so the prefix tells you the property unambiguously.
+> **Disambiguation rule:** `text-*` checks text-size tokens and numeric values first, then color tokens. `border-*` checks numeric widths first, then color tokens. This keeps authoring CSS-first while preserving deterministic output.
 
-Display/position atoms exist (`block hidden absolute relative fixed sticky`), but layout is usually expressed with primitives (§6) instead.
+Display, flex, grid, position, overflow, border, and alignment atoms are plain utilities (`flex`, `grid`, `direction-column`, `align-center`, `justify-between`, `place-center`).
 
 ---
 
@@ -119,93 +137,106 @@ A **variant** is a condition prefix: state (`hover focus active disabled`), grou
 **Standard form** (Tailwind-compatible, one atom per prefix):
 
 ```
-hover:bg-accent  hover:fg-on-accent  hover:scale-105
+hover:bg-accent  hover:text-on-accent  hover:scale-105
 ```
 
 **Grouped form** (Beam) — factor the prefix out once:
 
 ```
-hover:(bg-accent fg-on-accent scale-105)
+hover:(bg-accent text-on-accent scale-105)
 ```
 
-Both compile to identical atoms. The group is read-time sugar that unfolds to `hover:bg-accent`, `hover:fg-on-accent`, `hover:scale-105`.
+Both compile to identical atoms. The group is read-time sugar that unfolds to `hover:bg-accent`, `hover:text-on-accent`, `hover:scale-105`.
 
 **Stacking** variants — all conditions must hold; read outer→inner:
 
 ```
-tablet:dark:(bg-base fg-muted)    ->  at >=tablet AND dark: those atoms
+tablet:dark:(bg-base text-muted)    ->  at >=tablet AND dark: those atoms
 ```
 
 **Nesting** groups — a group may contain further variants/groups:
 
 ```
-tablet:(p-6 round-lg hover:(bg-surface scale-[1.02]))
+tablet:(p-6 rounded-lg hover:(bg-surface scale-[1.02]))
 ```
 
-Unfolds to: `tablet:p-6`, `tablet:round-lg`, `tablet:hover:bg-surface`, `tablet:hover:scale-[1.02]`.
+Unfolds to: `tablet:p-6`, `tablet:rounded-lg`, `tablet:hover:bg-surface`, `tablet:hover:scale-[1.02]`.
 
 This removes the single biggest source of class soup: the repeated `hover:…hover:…hover:` / `tablet:…tablet:…` prefix sprawl.
 
 ---
 
-## 6. Layout primitives
+## 6. Layout utilities, utility grouping, and config composition
 
-A primitive is a class that sets a layout *intent*. It takes modifiers in parens (same grouping syntax as §5) for its common axes. Primitives are classes, not components — they sit in `class=""` alongside everything else.
-
-| Primitive | Sets | Default modifiers |
-|---|---|---|
-| `stack` | `display:flex; flex-direction:column` | `gap-0`, items stretch |
-| `row` | `display:flex; flex-direction:row` | `gap-0`, items stretch |
-| `cluster` | `display:flex; flex-wrap:wrap; align-items:center` | `gap-0` |
-| `grid` | `display:grid` | one column |
-| `place` | `display:grid; place-items:center` | centers its child on both axes |
-
-### Modifier vocabulary (inside a primitive's parens)
-
-- **Gap:** `gap-N` (also `gap-x-N`, `gap-y-N`)
-- **Cross-axis align** (`align-items`): bare `center`, or `align-start | align-end | align-stretch | align-baseline`
-- **Main-axis distribute** (`justify-content`): `between | around | evenly`, or `justify-start | justify-center | justify-end`
-- **Grid:** `cols-N` → `repeat(N, 1fr)`; `rows-N`; arbitrary `cols-[200px_1fr]`
-- **Wrap:** `wrap | nowrap`
-
-> **Disambiguation rule:** bare `center` *inside* `stack()/row()/cluster()` means `align-items:center` (the cross axis — the thing you reach for constantly). To center a single child on *both* axes, use the `place` primitive. `center` therefore never means two things on the same element.
-
-### Examples
+Layout is expressed with plain CSS-first utilities:
 
 ```html
-<!-- vertical list, 1rem gaps -->
-<div class="stack(gap-4)">…</div>
-
-<!-- icon + label, vertically centered, small gap -->
-<div class="row(center gap-2)">…</div>
-
-<!-- nav bar: pushed apart, vertically centered -->
-<header class="row(between center) p-4">…</header>
-
-<!-- wrapping chip group -->
-<div class="cluster(gap-2)">…</div>
-
-<!-- responsive grid: 1 col on mobile, 3 from tablet -->
-<div class="grid(cols-1 tablet:cols-3 gap-6)">…</div>
-
-<!-- perfectly centered hero -->
-<section class="place h-screen">…</section>
+<main class="grid place-center h-screen bg-base text-fg">
+<section class="flex direction-column align-center gap-4 p-4 bg-surface rounded-md">
+<header class="flex direction-column gap-4 tablet:(direction-row justify-between align-center)">
 ```
 
-Primitives compose freely with atoms, grouping, and responsive variants on the same element:
+Utility grouping reduces visual noise for related declarations:
 
 ```html
-<article class="stack(gap-4) p-6 bg-surface round-lg tablet:row(between center)">
+<article class="padding:(16 top:24) text:(16 bold center) border:(1 solid accent)">
 ```
 
-This is the everyday shape of Beam markup: one or two primitives carrying the layout, a few atoms for spacing/color, the occasional grouped variant. Compare:
+Expands as if written:
 
+```txt
+p-16 pt-24 text-16 font-bold text-center border-1 border-solid border-accent
 ```
-Tailwind:
-<div class="flex flex-col items-center gap-4 p-6 rounded-lg bg-zinc-900 hover:bg-zinc-800 md:flex-row md:items-center md:justify-between">
 
-Beam:
-<div class="stack(center gap-4) p-6 round-lg bg-surface hover:bg-base tablet:row(between center)">
+Shortcuts are named class-string aliases:
+
+```ts
+shortcuts: {
+  card: 'flex direction-column gap-4 p-card bg-surface rounded-md',
+}
+```
+
+Usage:
+
+```html
+<article class="card hover:(bg-surface+8 scale-105)">
+```
+
+Recipes are first-class component variants in config. Beam class strings can reference the recipe base (`button`) or a recipe variant (`button:primary`):
+
+```ts
+recipes: {
+  button: {
+    base: 'px-4 py-2 rounded-md',
+    variants: {
+      primary: 'bg-accent text-on-accent',
+      secondary: 'bg-surface border-line',
+    },
+  },
+}
+```
+
+Tree-shakeable utility modules let projects disable families they do not use. Modules are enabled by default when omitted:
+
+```ts
+utilities: {
+  layout: true,
+  spacing: true,
+  colors: true,
+  typography: true,
+  effects: true,
+}
+```
+
+Presets are plain config fragments merged before local config, so local tokens, shortcuts, recipes, and utility flags win:
+
+```ts
+presets: [
+  {
+    tokens: { spacing: { section: '2rem' } },
+    shortcuts: { center: 'grid place-center' },
+  },
+]
 ```
 
 ---
@@ -217,7 +248,7 @@ Beam:
 **Static arbitrary** (escape hatch, compiled once): square brackets.
 
 ```
-w-[347px]   round-[10px]   bg-[oklch(72%_0.14_240)]   grid(cols-[200px_1fr])
+w-[347px]   rounded-[10px]   bg-[oklch(72%_0.14_240)]   cols-[200px_1fr]
 ```
 
 **Dynamic / runtime** — the thing Tailwind fumbles. A utility can read a CSS custom property via `(--name)`; you set the property at runtime. The class is stable and atomic regardless of the value, so there's no safelist and no class-string concatenation.
@@ -247,14 +278,17 @@ The mini-language the compiler parses (EBNF-ish). This is the contract to implem
 
 ```ebnf
 classlist   = token { WS token } ;
-token       = primitive | group | utility ;
+token       = utility-group | group | utility ;
 
-primitive   = name "(" classlist ")" ;          (* stack(center gap-4)        *)
-group       = variant-chain "(" classlist ")" ;  (* tablet:hover:(bg-accent fg-base)*)
+utility-group = group-name ":(" group-items ")" ; (* padding:(16 top:24)      *)
+group       = variant-chain "(" classlist ")" ;  (* tablet:hover:(bg-accent text-base)*)
 utility     = [ variant-chain ] base ;           (* tablet:p-6, p-6            *)
 
 variant-chain = variant { ":" variant } ":" ;    (* tablet:dark:hover:         *)
 variant     = ident | arbitrary-selector ;       (* hover, tablet, [&>svg]     *)
+group-name  = "padding" | "margin" | "text" | "border" ;
+group-items = group-item { WS group-item } ;
+group-item  = ident | ident ":" value ;
 
 base        = ident [ "-" value ]                 (* p-4, bg-surface, w-full    *)
             | ident "-(" cssvar ")" ;             (* w-(--w)  -> dynamic        *)
@@ -262,28 +296,27 @@ value       = step | name | "[" raw "]" ;         (* 4 | surface | [347px]      
 cssvar      = "--" ident ;
 ```
 
-**Unfold rule:** `group` and `primitive` distribute their `variant-chain` (and, for primitives, their `display`/`direction` base) across every contained `utility`, recursively, until the result is a flat list of `(variant-chain, base)` atoms. Each unique atom emits one CSS rule.
+**Unfold rule:** groups distribute their `variant-chain` across every contained utility, recursively. Utility groups expand to ordinary utilities first. Shortcuts and recipes expand from config into class strings, then follow the same parse/unfold path. Each unique atom emits one CSS rule.
 
 **Worked unfold:**
 
 ```
-tablet:(p-6 hover:(bg-surface round-lg))
+tablet:(p-6 hover:(bg-surface rounded-lg))
 ```
 →
 ```
 tablet:p-6
 tablet:hover:bg-surface
-tablet:hover:round-lg
+tablet:hover:rounded-lg
 ```
 
 ```
-row(between center gap-2)
+padding:(16 top:24)
 ```
-→ (row sets display:flex;flex-direction:row on the element, then:)
+→
 ```
-justify-between   ->  justify-content:space-between
-items-center      ->  align-items:center
-gap-2             ->  gap:2px
+p-16
+pt-24
 ```
 
 ---
@@ -291,18 +324,17 @@ gap-2             ->  gap:2px
 ## 9. Out of scope for v0 (but designed-for)
 
 - **Tailwind codemod.** A migration that maps Tailwind atoms → Beam atoms and folds repeated prefixes into groups. Critical adoption lever; ships v0.2.
-- **LSP / editor extension.** Hover a class to see resolved CSS; autocomplete from your tokens. This is the "docs live in the editor" play — no docs-site dependency.
-- **Recipe / variants API** for component-level variant sets (button tones/sizes).
+- **Full LSP / editor extension.** Hover a class to see resolved CSS; autocomplete from your tokens. This is the "docs live in the editor" play — no docs-site dependency.
+- **Framework recipe helpers** for component props such as `<Button variant="primary" />`.
 - **`@beam` directives** for composing named component classes from atoms when you genuinely want a semantic class.
 
 ---
 
 ## 10. Open decisions to settle before building
 
-1. **Primitive base specificity** — do primitives live in `beam.base` or `beam.utilities`? Affects whether an atom can override a primitive default on the same element. Recommend `beam.base` so atoms always win.
-2. **Group delimiter** — parens `()` (proposed) vs. brackets. Parens read best but must be escaped in generated class names; confirm the escaping scheme is bundler-safe.
-3. **Arbitrary value separator inside grid** — underscore (`cols-[200px_1fr]`) follows Tailwind; keep for familiarity.
-4. **How dynamic `(--w)` interacts with SSR/streaming** — inline `style` is fine everywhere; document the pattern per framework.
+1. **Group delimiter** — parens `()` vs. brackets. Parens read best but must be escaped in generated class names; confirm the escaping scheme is bundler-safe.
+2. **Arbitrary value separator inside grid** — underscore (`cols-[200px_1fr]`) follows Tailwind; keep for familiarity.
+3. **How dynamic `(--w)` interacts with SSR/streaming** — inline `style` is fine everywhere; document the pattern per framework.
 
 ---
 

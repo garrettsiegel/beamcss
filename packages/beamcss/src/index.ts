@@ -2,6 +2,7 @@ export type TokenMap = Record<string, string>
 
 export interface BeamTokens {
   space?: TokenMap
+  spacing?: TokenMap
   color?: TokenMap
   radius?: TokenMap
   text?: TokenMap
@@ -10,11 +11,29 @@ export interface BeamTokens {
 }
 
 export interface BeamConfig {
+  presets?: BeamPreset[]
   tokens: BeamTokens
+  shortcuts?: Record<string, string>
+  recipes?: Record<string, BeamRecipe>
+  utilities?: Record<string, boolean>
   /** Color token painted onto `body`'s background by the reset. Names a key in `tokens.color`. */
   background?: string
   /** Color token used for `body`'s text color by the reset. Names a key in `tokens.color`. */
   foreground?: string
+}
+
+export interface BeamPreset {
+  tokens?: Partial<BeamTokens>
+  shortcuts?: Record<string, string>
+  recipes?: Record<string, BeamRecipe>
+  utilities?: Record<string, boolean>
+  background?: string
+  foreground?: string
+}
+
+export interface BeamRecipe {
+  base?: string
+  variants?: Record<string, string>
 }
 
 export function defineConfig<const T extends BeamConfig>(config: T): T {

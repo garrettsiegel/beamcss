@@ -19,7 +19,7 @@ try {
 
 export default defineConfig({
   tokens: {
-    space: { card: "1rem" },
+    spacing: { card: "1rem" },
     color: {
       accent: "#3b82f6",
       base: "#0b0b0c",
@@ -36,7 +36,7 @@ export default defineConfig({
   )
   await writeFile(
     join(tempDir, "index.html"),
-    `<section class="stack(center gap-4) p-4 bg-surface hover:(bg-accent fg-fg) tablet:text-lg">Beam</section>`,
+    `<section class="flex direction-column align-center gap-4 p-4 bg-surface hover:(bg-accent text-fg) tablet:text-lg">Beam</section>`,
   )
 
   const result = await postcss([
@@ -50,9 +50,10 @@ export default defineConfig({
 
   assertIncludes(result.css, "/* app css */")
   assertIncludes(result.css, "@layer beam.reset, beam.tokens, beam.base, beam.utilities;")
-  assertIncludes(result.css, ".stack\\(center.gap-4\\){display:flex;}")
+  assertIncludes(result.css, ".flex{display:flex;}")
+  assertIncludes(result.css, ".align-center{align-items:center;}")
   assertIncludes(result.css, ".p-4{padding:4px;}")
-  assertIncludes(result.css, ".hover\\:\\(bg-accent.fg-fg\\):hover{background:var(--color-accent);}")
+  assertIncludes(result.css, ".hover\\:\\(bg-accent.text-fg\\):hover{background:var(--color-accent);}")
   assertIncludes(result.css, "@media (min-width:48rem){.tablet\\:text-lg{font-size:var(--text-lg);}}")
 } finally {
   await rm(tempDir, { force: true, recursive: true })

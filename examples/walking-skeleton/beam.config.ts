@@ -1,8 +1,15 @@
 import { defineConfig } from "beamcss"
 
 export default defineConfig({
+  presets: [
+    {
+      shortcuts: {
+        "screen-center": "grid place-center h-screen",
+      },
+    },
+  ],
   tokens: {
-    space: { card: "1rem", section: "1.5rem" },
+    spacing: { card: "1rem", section: "1.5rem" },
     color: {
       base: "#0b0b0c",
       surface: "#16161a",
@@ -28,6 +35,13 @@ export default defineConfig({
       wide: "80rem",
       "mobile-landscape": "(max-width:47.999rem) and (orientation:landscape)",
     },
+  },
+  utilities: {
+    layout: true,
+    spacing: true,
+    colors: true,
+    typography: true,
+    effects: true,
   },
   background: "base",
   foreground: "fg",

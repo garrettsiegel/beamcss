@@ -59,7 +59,7 @@ function writeFixtures(dir, count) {
 
 export default defineConfig({
   tokens: {
-    space: { card: "1rem", section: "2rem" },
+    spacing: { card: "1rem", section: "2rem" },
     color: {
       base: "#0b0b0c",
       surface: "#16161a",
@@ -101,16 +101,16 @@ function repeatMarkup(template, count) {
 }
 
 function beamCard(index) {
-  return `<article class="stack(gap-4) p-4 bg-surface round-lg border bd-line hover:(bg-[color-mix(in_srgb,var(--color-surface),white_8%)] scale-105) tablet:(row(center between) p-6)">
-  <header class="row(between center) gap-2">
-    <h2 class="text-lg fg-fg">Card ${index}</h2>
-    <span class="px-2 py-1 round-full bg-accent fg-on-accent text-sm">live</span>
+  return `<article class="flex direction-column gap-4 p-4 bg-surface rounded-lg border border-line hover:(bg-[color-mix(in_srgb,var(--color-surface),white_8%)] scale-105) tablet:(direction-row align-center justify-between p-6)">
+  <header class="flex direction-row justify-between align-center gap-2">
+    <h2 class="text-lg text-fg">Card ${index}</h2>
+    <span class="px-2 py-1 rounded-full bg-accent text-on-accent text-sm">live</span>
   </header>
-  <p class="text-base fg-muted max-w-[42rem]">Grouped variants and layout primitives keep repeated intent compact.</p>
-  <div class="grid(cols-1 tablet:cols-3 gap-3)">
-    <span class="p-3 bg-panel round-md fg-success">parse</span>
-    <span class="p-3 bg-panel round-md fg-warning">emit</span>
-    <span class="p-3 bg-panel round-md fg-accent">ship</span>
+  <p class="text-base text-muted max-w-[42rem]">Grouped variants and utility groups keep repeated intent compact.</p>
+  <div class="grid cols-1 tablet:cols-3 gap-3">
+    <span class="p-3 bg-panel rounded-md text-success">parse</span>
+    <span class="p-3 bg-panel rounded-md text-warning">emit</span>
+    <span class="p-3 bg-panel rounded-md text-accent">ship</span>
   </div>
 </article>`
 }
@@ -121,7 +121,7 @@ function tailwindCard(index) {
     <h2 class="text-lg text-zinc-100">Card ${index}</h2>
     <span class="px-2 py-1 rounded-full bg-blue-500 text-white text-sm">live</span>
   </header>
-  <p class="text-base text-zinc-400 max-w-[42rem]">Grouped variants and layout primitives keep repeated intent compact.</p>
+  <p class="text-base text-zinc-400 max-w-[42rem]">Grouped variants and utility groups keep repeated intent compact.</p>
   <div class="grid grid-cols-1 md:grid-cols-3 gap-3">
     <span class="p-3 bg-zinc-800 rounded-md text-green-500">parse</span>
     <span class="p-3 bg-zinc-800 rounded-md text-amber-500">emit</span>

@@ -6,7 +6,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 Beam CSS is a Rust-fast, utility-first CSS framework. It gives humans and coding agents a small, regular styling grammar that compiles to atomic CSS under cascade layers. The pitch: **Tailwind's authoring speed, without the wall of classes.** Tagline: *focused styles, zero scatter.*
 
-Key differentiators over Tailwind: **variant grouping** (`hover:(bg-accent fg-base)`), **layout primitives** (`stack`, `row`, `cluster`, `grid`, `place`), and **dynamic values** (`w-(--var)` → `var(--var)`).
+Key differentiators over Tailwind: **variant grouping** (`hover:(bg-accent text-base)`), **utility grouping** (`padding:(16 top:24)`), **config composition** (`shortcuts`, `recipes`, `presets`, utility modules), and **dynamic values** (`w-(--var)` → `var(--var)`).
 
 Read `docs/beam-css-spec.md` for the grammar (the class-string syntax is the public API) and `docs/ROADMAP.md` for what's done and what's next.
 
@@ -68,7 +68,7 @@ cargo run -p beam_cli --bin beam -- check \
   --content examples/walking-skeleton \
   --format json
 
-cargo run -p beam_cli --bin beam -- explain "stack(center gap-4) hover:(bg-accent fg-on-accent)" \
+cargo run -p beam_cli --bin beam -- explain "flex direction-column gap-4 hover:(bg-accent text-on-accent)" \
   --config examples/walking-skeleton/beam.config.ts \
   --format json
 ```
@@ -122,3 +122,54 @@ The workspace enforces `#![forbid(unsafe_code)]` globally.
 - **Every grammar feature must be used in `examples/` before it's "done."**
 - **Golden-file snapshot tests** for every compiler output change.
 - Conventional Commits.
+
+---
+
+## Architecture constraints (do not violate)
+
+These apply to every agent session. Violations require explicit user re-approval, not a judgment call.
+
+- **No new Rust crates or top-level npm packages** without explicit approval in the task plan.
+- **Config parsing contract is JSON5-only.** `beam.config.ts` is extracted via brace-balanced JSON5 parsing — do not add TypeScript execution (`ts-node`, `tsx`, dynamic `require`, etc.).
+- **napi-rs binding interface** (`crates/beam_node/src/lib.rs`) public signatures must stay in sync with `packages/beamcss/src/native.ts`. Change both together, never one alone.
+- **`@layer` order is fixed:** `beam.reset, beam.tokens, beam.base, beam.utilities`. Do not reorder — it controls specificity.
+- **Committed `.node` binary** (`packages/beamcss/native/`) is not rebuilt automatically. After any `beam_core`/`beam_node` change, run `pnpm --filter beamcss build:native`. JS plugin tests (`@beamcss/vite`, `@beamcss/postcss`) test against this binary — if it's stale, they silently test old behavior.
+- **All compiler output changes require snapshot test updates.** Never delete a golden file without replacing it.
+
+## Out of bounds (require separate re-approval to touch)
+
+- `Cargo.toml` files (adding/removing crates or dependencies)
+- `.github/` (CI configuration)
+- `packages/beamcss/native/` (committed `.node` binaries — rebuild, don't edit)
+- `fuzz/` targets
+- Any semver-breaking grammar change without a version bump plan
+
+---
+
+## Agent workflow (per-slice loop)
+
+Every task runs as a series of small, auditable slices. Each slice has a frozen contract before any code is written.
+
+**Before starting a slice**, state:
+- Intended slice (what this pass does)
+- Allowed files/functions (exhaustive list)
+- Tests that must pass
+- Explicit non-goals (what this slice must NOT change)
+
+**After completing a slice**, emit a receipt:
+```
+- intended slice:
+- allowed files/functions:
+- actual files/functions changed:
+- behavior added:
+- behavior removed:
+- tests added/updated:
+- explicit non-goals:
+- rollback path:
+```
+
+**Two-gate review (in order):**
+1. **Authorization gate** — does "actual files changed" match "allowed files"? If not, revert and re-scope. Don't review quality until authorization passes.
+2. **Quality gate** — is the code correct and clean?
+
+If a slice touches `Cargo.toml`, `.github/`, shared types, or the napi binding interface → stop and get explicit re-approval before proceeding.

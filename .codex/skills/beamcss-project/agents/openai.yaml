@@ -1,0 +1,4 @@
+interface:
+  display_name: "Beam CSS Project"
+  short_description: "Beam CSS repo workflow and code rules"
+  default_prompt: "Use $beamcss-project to plan and implement a Beam CSS repository change."

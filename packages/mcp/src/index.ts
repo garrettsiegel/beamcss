@@ -8,20 +8,18 @@ export interface BeamMcpOptions {
   version?: string
 }
 
-const primitiveReference = `Beam layout primitives:
+const utilityReference = `Beam utilities:
 
-- stack(gap-4): flex column, default gap-0
-- row(center gap-2): flex row, center maps to align-items:center
-- cluster(gap-2): wrapping flex row, align-items:center
-- grid(cols-1 tablet:cols-3 gap-4): display grid with track modifiers
-- place: display grid; place-items:center
+- flex direction-column gap-4: flex column with a gap
+- flex direction-row align-center gap-2: flex row with centered items
+- flex wrap align-center gap-2: wrapping flex row
+- grid cols-1 tablet:cols-3 gap-4: responsive grid columns
+- grid place-center: centered grid content
 
-Primitive modifiers:
-- gap-*, gap-x-*, gap-y-*
-- center, align-start, align-end, align-stretch, align-baseline
-- between, around, evenly, justify-start, justify-center, justify-end
-- cols-*, rows-*, cols-[200px_1fr]
-- wrap, nowrap`
+Utility groups:
+- padding:(16 top:24)
+- text:(16 bold center)
+- border:(1 solid accent)`
 
 const variantReference = `Beam variants:
 
@@ -34,8 +32,8 @@ const variantReference = `Beam variants:
 
 Use grouped variants to factor repeated prefixes:
 
-hover:(bg-accent fg-on-accent scale-105)
-tablet:(p-6 round-lg hover:(bg-surface scale-[1.02]))`
+hover:(bg-accent text-on-accent scale-105)
+tablet:(p-6 rounded-lg hover:(bg-surface scale-[1.02]))`
 
 export function createBeamMcpServer(options: BeamMcpOptions = {}) {
   const server = new McpServer({
@@ -46,10 +44,10 @@ export function createBeamMcpServer(options: BeamMcpOptions = {}) {
   server.registerTool(
     "beam_syntax_reference",
     {
-      description: "Return Beam CSS syntax guidance for utilities, variants, and primitives.",
+      description: "Return Beam CSS syntax guidance for utilities, variants, and values.",
       inputSchema: z.object({
         topic: z
-          .enum(["all", "variants", "primitives", "values", "install"])
+          .enum(["all", "variants", "utilities", "values", "install"])
           .default("all")
           .describe("Syntax topic to return."),
       }),
@@ -130,37 +128,37 @@ beamcss({ config: "beam.config.ts", content: ["index.html", "src"] })`
   const values = `Beam value syntax:
 
 - Literal spacing: p-4, gap-2
-- Token name: gap-section, bg-surface, fg-muted, round-md, text-lg
+- Token name: gap-section, bg-surface, text-muted, rounded-md, text-lg
 - Arbitrary static value: max-w-[42rem], bg-[oklch(72%_0.14_240)], bg-[color-mix(in_srgb,var(--color-surface),white_8%)]
 - Dynamic CSS variable: w-(--progress), h-(--panel-height)`
 
   if (topic === "install") return install
   if (topic === "variants") return variantReference
-  if (topic === "primitives") return primitiveReference
+  if (topic === "utilities") return utilityReference
   if (topic === "values") return values
 
-  return [install, values, variantReference, primitiveReference].join("\n\n---\n\n")
+  return [install, values, variantReference, utilityReference].join("\n\n---\n\n")
 }
 
 function scaffoldComponent(kind: string, jsx: boolean): string {
   const attr = jsx ? "className" : "class"
   const snippets: Record<string, string> = {
-    button: `<button ${attr}="row(center gap-2) px-4 py-2 round-md bg-accent fg-on-accent hover:(scale-105)">
+    button: `<button ${attr}="flex direction-row align-center gap-2 px-4 py-2 rounded-md bg-accent text-on-accent hover:(scale-105)">
   Deploy
 </button>`,
-    card: `<article ${attr}="stack(gap-4) p-4 bg-surface round-lg border bd-line">
-  <h2 ${attr}="text-lg fg-fg">Card title</h2>
-  <p ${attr}="text-base fg-muted">A compact card using Beam primitives.</p>
+    card: `<article ${attr}="flex direction-column gap-4 p-4 bg-surface rounded-lg border border-line">
+  <h2 ${attr}="text-lg text-fg">Card title</h2>
+  <p ${attr}="text-base text-muted">A compact card using Beam utilities.</p>
 </article>`,
-    "dashboard-panel": `<section ${attr}="grid(cols-1 tablet:cols-3 gap-4)">
-  <article ${attr}="stack(gap-2) p-4 bg-surface round-lg border bd-line">
-    <p ${attr}="text-sm fg-muted">Build time</p>
-    <strong ${attr}="text-xl fg-success">38ms</strong>
+    "dashboard-panel": `<section ${attr}="grid cols-1 tablet:cols-3 gap-4">
+  <article ${attr}="flex direction-column gap-2 p-4 bg-surface rounded-lg border border-line">
+    <p ${attr}="text-sm text-muted">Build time</p>
+    <strong ${attr}="text-xl text-success">38ms</strong>
   </article>
 </section>`,
-    "form-row": `<label ${attr}="stack(gap-2)">
-  <span ${attr}="text-sm fg-muted">Email</span>
-  <input ${attr}="px-3 py-2 round-md border bd-line bg-surface fg-fg focus:(bd-accent)" />
+    "form-row": `<label ${attr}="flex direction-column gap-2">
+  <span ${attr}="text-sm text-muted">Email</span>
+  <input ${attr}="px-3 py-2 rounded-md border border-line bg-surface text-fg focus:(border-accent)" />
 </label>`,
   }
 

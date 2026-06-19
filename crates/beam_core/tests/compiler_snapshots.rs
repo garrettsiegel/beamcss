@@ -1,11 +1,12 @@
 use std::collections::BTreeMap;
 
-use beam_core::{compile, explain, parse_classlist, BeamConfig, BeamTokens};
+use beam_core::{compile, explain, parse_classlist, BeamConfig, BeamRecipe, BeamTokens};
 
 fn config() -> BeamConfig {
     BeamConfig {
+        presets: Vec::new(),
         tokens: BeamTokens {
-            space: BTreeMap::from([("section".into(), "2rem".into())]),
+            spacing: BTreeMap::from([("section".into(), "2rem".into())]),
             color: BTreeMap::from([
                 ("accent".into(), "#3b82f6".into()),
                 ("base".into(), "#0b0b0c".into()),
@@ -26,6 +27,18 @@ fn config() -> BeamConfig {
                 ),
             ]),
         },
+        shortcuts: BTreeMap::from([(
+            "hero-card".into(),
+            "flex direction-column align-center gap-4 p-6 bg-surface rounded-md".into(),
+        )]),
+        recipes: BTreeMap::from([(
+            "button".into(),
+            BeamRecipe {
+                base: "rounded-md padding:(8 x:12)".into(),
+                variants: BTreeMap::from([("primary".into(), "bg-accent text-on-accent".into())]),
+            },
+        )]),
+        utilities: BTreeMap::new(),
         background: Some("base".into()),
         foreground: Some("fg".into()),
     }
@@ -36,11 +49,12 @@ fn representative_markup_matches_golden_css() {
     let result = compile(
         &config(),
         &[
-            "place min-h-screen bg-base fg-fg font-ui".into(),
-            "stack(center gap-4) p-6 bg-surface round-md hover:(bg-accent fg-on-accent scale-105)"
-                .into(),
-            "tablet:(row(center between gap-2) text-lg) [&>svg]:(w-[1rem] h-[1rem] fg-muted)"
-                .into(),
+            "grid place-center min-h-screen bg-base text-fg font-ui".into(),
+            "hero-card".into(),
+            "flex direction-column align-center gap-4 p-6 bg-surface rounded-md hover:(bg-accent text-on-accent scale-105)".into(),
+            "tablet:(direction-row justify-between align-center gap-2 text-lg) [&>svg]:(w-[1rem] h-[1rem] text-muted)".into(),
+            "padding:(16 top:24) text:(16 bold center) border:(1 solid accent)".into(),
+            "button button:primary".into(),
         ],
     );
 
@@ -54,11 +68,14 @@ fn representative_markup_matches_golden_css() {
 #[test]
 fn parser_reports_edge_case_failures() {
     let cases = [
-        ("hover:()", "group or primitive has no children"),
+        ("hover:()", "group has no children"),
         ("hover:(bg-accent", "unclosed `(` in utility"),
         ("hover:bg-accent)", "unmatched `)` in utility"),
         ("md::bg-accent", "empty variant in variant chain"),
-        ("madeup(bg-accent)", "unknown primitive `madeup`"),
+        (
+            "madeup(bg-accent)",
+            "unrecognized group syntax `madeup(...)`",
+        ),
     ];
 
     for (classlist, expected) in cases {
@@ -70,22 +87,24 @@ fn parser_reports_edge_case_failures() {
 
 #[test]
 fn compiler_keeps_going_after_bad_classes() {
-    let result = compile(&config(), &["p-4 bogus tablet:unknown fg-muted".into()]);
+    let result = compile(&config(), &["p-4 bogus tablet:unknown text-muted".into()]);
 
     assert_eq!(result.errors.len(), 2);
     assert!(result.css.contains(".p-4{padding:4px;}"));
-    assert!(result.css.contains(".fg-muted{color:var(--color-muted);}"));
+    assert!(result
+        .css
+        .contains(".text-muted{color:var(--color-muted);}"));
     assert_eq!(result.errors[0].class_name, "bogus");
     assert_eq!(result.errors[1].class_name, "tablet:unknown");
 }
 
 #[test]
-fn explain_reports_flat_grouped_primitive_and_dynamic_atoms() {
+fn explain_reports_flat_grouped_and_dynamic_atoms() {
     let result = explain(
         &config(),
         &[
-            "p-4 hover:(bg-accent fg-on-accent)".into(),
-            "stack(center gap-(--gap)) grid(cols-[200px_1fr])".into(),
+            "p-4 hover:(bg-accent text-on-accent)".into(),
+            "flex align-center gap-(--gap) cols-[200px_1fr]".into(),
         ],
     );
 
@@ -100,21 +119,17 @@ fn explain_reports_flat_grouped_primitive_and_dynamic_atoms() {
     assert_eq!(first[1].atoms.len(), 2);
     assert_eq!(
         first[1].atoms[0].selector,
-        ".hover\\:\\(bg-accent.fg-on-accent\\):hover"
+        ".hover\\:\\(bg-accent.text-on-accent\\):hover"
     );
 
     let second = &result.class_strings[1].tokens;
-    assert_eq!(second[0].kind, "primitive");
-    assert_eq!(second[0].primitive.as_deref(), Some("stack"));
-    assert!(second[0]
+    assert_eq!(second[0].kind, "utility");
+    assert_eq!(second[0].atoms[0].declaration, "display:flex");
+    assert!(second[2]
         .atoms
         .iter()
-        .any(|atom| atom.declaration == "gap:var(--gap)" && atom.layer == "beam.base"));
-    assert_eq!(
-        second[1].atoms[0].declaration, "display:grid",
-        "grid primitive emits its base display atom first"
-    );
-    assert!(second[1]
+        .any(|atom| atom.declaration == "gap:var(--gap)"));
+    assert!(second[3]
         .atoms
         .iter()
         .any(|atom| atom.declaration == "grid-template-columns:200px 1fr"));
@@ -136,6 +151,6 @@ fn explain_keeps_structured_errors_with_partial_success() {
     );
     assert_eq!(
         result.class_strings[0].tokens[2].errors[0].message,
-        "group or primitive has no children"
+        "group has no children"
     );
 }

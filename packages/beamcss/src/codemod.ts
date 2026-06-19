@@ -14,7 +14,6 @@ interface ConvertedToken {
   warning?: CodemodWarning
 }
 
-const textSizeNames = new Set(["xs", "sm", "base", "lg", "xl", "2xl", "3xl", "4xl"])
 const variantNames = new Set([
   "hover",
   "focus",
@@ -71,16 +70,16 @@ function convertToken(raw: string): ConvertedToken {
 }
 
 function mapBase(base: string): { base: string; warning?: CodemodWarning } {
-  if (base === "rounded") return { base: "round-md" }
-  if (base.startsWith("rounded-")) return { base: `round-${base.slice("rounded-".length)}` }
+  if (base === "rounded") return { base: "rounded-md" }
+  if (base.startsWith("rounded-")) return { base }
   if (base.startsWith("border-") && base !== "border-0") {
     const value = base.slice("border-".length)
     if (/^\d+$/.test(value)) return { base }
-    return { base: `bd-${value}` }
+    return { base: `border-${value}` }
   }
   if (base.startsWith("text-")) {
     const value = base.slice("text-".length)
-    return textSizeNames.has(value) ? { base } : { base: `fg-${value}` }
+    return { base }
   }
   if (base === "font-sans") return { base: "font-ui" }
   if (base === "font-mono") return { base: "font-mono" }
@@ -101,7 +100,7 @@ function mapBase(base: string): { base: string; warning?: CodemodWarning } {
 }
 
 function isBeamCompatibleBase(base: string): boolean {
-  return /^(p|px|py|pt|pr|pb|pl|m|mx|my|mt|mr|mb|ml|gap|gap-x|gap-y|bg|fg|bd|round|text|font|w|h|min-w|min-h|max-w|max-h|scale|cols|rows)-/.test(
+  return /^(p|px|py|pt|pr|pb|pl|m|mx|my|mt|mr|mb|ml|gap|gap-x|gap-y|bg|border|rounded|text|font|w|h|min-w|min-h|max-w|max-h|scale|cols|rows)-/.test(
     base,
   )
 }

@@ -13,7 +13,7 @@ const grouped = tailwindToBeamClassName(
 
 assert.equal(
   grouped.className,
-  "p-4 round-lg fg-zinc-100 bg-zinc-900 hover:(bg-blue-500 fg-white) md:hover:scale-105",
+  "p-4 rounded-lg text-zinc-100 bg-zinc-900 hover:(bg-blue-500 text-white) md:hover:scale-105",
 )
 assert.equal(grouped.warnings.length, 0)
 
@@ -36,7 +36,7 @@ const cli = spawnSync(
 )
 
 assert.equal(cli.status, 0)
-assert.equal(cli.stdout.trim(), "hover:(bg-blue-500 fg-white)")
+assert.equal(cli.stdout.trim(), "hover:(bg-blue-500 text-white)")
 
 const repoRoot = resolve(new URL("../../..", import.meta.url).pathname)
 const tempDir = mkdtempSync(join(tmpdir(), "beam-cli-test-"))
@@ -88,7 +88,7 @@ try {
     [
       "packages/beamcss/dist/cli.js",
       "explain",
-      "hover:(bg-accent fg-on-accent)",
+      "hover:(bg-accent text-on-accent)",
       "--config",
       "examples/dashboard/beam.config.ts",
     ],
@@ -105,18 +105,36 @@ try {
 }
 
 const completions = suggestBeamClasses({
+  presets: [
+    {
+      shortcuts: { center: "grid place-center" },
+      tokens: { spacing: { preset: "2rem" } },
+    },
+  ],
   tokens: {
-    space: { card: "1rem" },
+    spacing: { card: "1rem" },
     color: { accent: "#3b82f6" },
     radius: { md: "8px" },
     text: { lg: "20px" },
     font: { ui: "Inter, sans-serif" },
     screens: { tablet: "48rem" },
   },
+  recipes: {
+    button: {
+      base: "rounded-md",
+      variants: { primary: "bg-accent text-white" },
+    },
+  },
 }).map((completion) => completion.label)
 
 assert(completions.includes("p-4"))
+assert(completions.includes("p-preset"))
 assert(completions.includes("bg-accent"))
-assert(completions.includes("round-md"))
-assert(completions.includes("stack()"))
+assert(completions.includes("text-accent"))
+assert(completions.includes("border-accent"))
+assert(completions.includes("rounded-md"))
+assert(completions.includes("flex"))
+assert(completions.includes("padding:()"))
+assert(completions.includes("center"))
+assert(completions.includes("button:primary"))
 assert(completions.includes("tablet:()"))

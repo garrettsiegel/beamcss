@@ -29,10 +29,9 @@ export interface ExplainClassString {
 
 export interface ExplainToken {
   raw: string
-  kind: "utility" | "group" | "primitive" | "invalid"
+  kind: "utility" | "group" | "invalid"
   variants: string[]
   base?: string
-  primitive?: string
   atoms: ExplainAtom[]
   errors: CompileMessage[]
 }
