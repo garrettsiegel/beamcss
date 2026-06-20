@@ -13,6 +13,19 @@ export function Introduction() {
         CSS under cascade layers - zero runtime cost.
       </p>
 
+      <div data-callout>
+        <span data-callout-icon aria-hidden="true">⇄</span>
+        <div data-callout-body>
+          <strong>Coming from Tailwind?</strong>
+          Most of Beam reads exactly like Tailwind. The exceptions are a handful of
+          layout utilities that use CSS property names instead of shorthand:{' '}
+          <code>flex-col</code> → <code>direction-column</code>,{' '}
+          <code>items-*</code> → <code>align-*</code>,{' '}
+          <code>grid-cols-*</code> → <code>cols-*</code>.{' '}
+          <Link to="/docs/from-tailwind">See the full Tailwind comparison →</Link>
+        </div>
+      </div>
+
       <h2 id="the-idea">The idea</h2>
       <p>
         The same hover state in Tailwind repeats the prefix on every utility. In Beam, the

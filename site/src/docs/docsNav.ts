@@ -6,6 +6,7 @@ import { Configuration } from './pages/Configuration'
 import { Syntax } from './pages/Syntax'
 import { Utilities } from './pages/Utilities'
 import { Tooling } from './pages/Tooling'
+import { FromTailwind } from './pages/FromTailwind'
 
 export interface DocPage {
   slug: string
@@ -23,6 +24,7 @@ export const docsPages: DocPage[] = [
   { slug: 'syntax', title: 'Writing styles', group: 'Core concepts', Component: Syntax },
   { slug: 'utilities', title: 'Utilities reference', group: 'Core concepts', Component: Utilities },
   { slug: 'tooling', title: 'CLI & integrations', group: 'Tooling', Component: Tooling },
+  { slug: 'from-tailwind', title: 'Coming from Tailwind', group: 'Guides', Component: FromTailwind },
 ]
 
 /** Default docs landing slug. */

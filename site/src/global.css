@@ -718,6 +718,63 @@ body::before {
 }
 
 /* ============================================================
+   Callout / notice box
+   ============================================================ */
+
+[data-callout] {
+  display: flex;
+  gap: 14px;
+  padding: 14px 18px;
+  margin: 0 0 28px;
+  border-radius: var(--radius-md);
+  background: color-mix(in srgb, var(--color-accent) 8%, var(--color-surface));
+  border: 1px solid color-mix(in srgb, var(--color-accent) 30%, var(--color-line));
+  border-left: 3px solid var(--color-accent);
+  font-size: var(--text-sm);
+  line-height: 1.6;
+  color: var(--color-muted);
+}
+
+[data-callout-icon] {
+  flex-shrink: 0;
+  margin-top: 1px;
+  color: var(--color-accent);
+}
+
+[data-callout-body] {
+  min-width: 0;
+}
+
+[data-callout-body] strong {
+  display: block;
+  margin-bottom: 4px;
+  color: var(--color-fg);
+  font-weight: 600;
+  font-size: var(--text-base);
+}
+
+[data-callout-body] code {
+  font-family: var(--font-mono);
+  font-size: 0.875em;
+  padding: 1px 5px;
+  border-radius: var(--radius-sm);
+  background: color-mix(in srgb, var(--color-accent) 12%, var(--color-base));
+  border: 1px solid color-mix(in srgb, var(--color-accent) 22%, var(--color-line));
+  color: var(--color-fg);
+  white-space: nowrap;
+}
+
+[data-callout-body] a {
+  color: var(--color-accent);
+  text-decoration: none;
+  border-bottom: 1px solid color-mix(in srgb, var(--color-accent) 35%, transparent);
+}
+
+[data-callout-body] a:hover {
+  border-bottom-color: var(--color-accent);
+}
+
+/* ============================================================
    Liquid metal buttons - solid dark body, metal ring border
    ============================================================ */
 

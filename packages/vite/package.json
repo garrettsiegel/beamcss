@@ -1,6 +1,6 @@
 {
   "name": "@beamcss/vite",
-  "version": "0.1.3",
+  "version": "0.1.4",
   "description": "Vite plugin for Beam CSS.",
   "type": "module",
   "main": "./dist/index.js",
@@ -28,7 +28,7 @@
   },
   "license": "MIT",
   "dependencies": {
-    "beamcss": "workspace:*"
+    "beamcss": "^0.1.3"
   },
   "devDependencies": {
     "typescript": "^6.0.3",
