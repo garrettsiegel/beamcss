@@ -10,3 +10,6 @@ packages/beamcss/native/*.node
 *.tgz
 npm-debug.log*
 .vscode/
+
+# local reference assets (font preview screenshots)
+font-samples/
