@@ -13,3 +13,5 @@ npm-debug.log*
 
 # local reference assets (font preview screenshots)
 font-samples/
+.vercel
+.env*.local
