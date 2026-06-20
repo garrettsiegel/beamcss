@@ -6,7 +6,7 @@ export function Hero() {
       <div data-hero-grid className="container">
         <div data-hero-topline>
           <span data-mission-label style={{ fontFamily: 'var(--font-mono)' }} className="text-sm text-accent">
-            new utility css / v0.1.1
+            utility-first css / v0.1.1
           </span>
           <span style={{ fontFamily: 'var(--font-mono)' }} className="text-sm text-muted">
             grouped syntax / atomic output
@@ -27,12 +27,13 @@ export function Hero() {
         <div data-hero-bottom>
           <div data-hero-copy className="flex direction-column gap-md">
             <p data-hero-kicker className="text-lg text-fg">
-              Focused styles, zero scatter.
+              Tailwind's speed, without the class wall.
             </p>
 
             <p data-hero-lede className="text-base text-muted">
-              A small grouped grammar for utility CSS. Write the prefix once;
-              Beam compiles the pattern into clean atomic output.
+              A utility-first CSS framework with a Rust compiler. Write a repeated
+              variant once and Beam expands it into clean, atomic CSS — nothing ships
+              to the browser but the styles.
             </p>
 
             <div data-telemetry-row>

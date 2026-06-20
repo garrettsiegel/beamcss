@@ -5,12 +5,13 @@ export function Comparison() {
 
         <div className="flex direction-column gap-sm">
           <span style={{ fontFamily: 'var(--font-mono)' }} className="text-sm text-accent">
-            the pitch
+            the difference
           </span>
-          <h2 className="text-2xl font-bold text-fg">Tailwind's speed. Without the class wall.</h2>
+          <h2 className="text-2xl font-bold text-fg">Same output. Half the noise.</h2>
           <p className="text-base text-muted max-w-[42rem]">
-            Write a repeated variant once and Beam expands it for you. Same atomic CSS,
-            half the noise in your markup — and nothing extra ships to the browser.
+            Variant grouping lets you write one prefix for a whole group of utilities.
+            The compiler expands it — identical CSS, far less markup to read, and zero
+            runtime overhead.
           </p>
         </div>
 
