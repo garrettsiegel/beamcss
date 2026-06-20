@@ -26,7 +26,7 @@
   },
   "license": "MIT",
   "dependencies": {
-    "beamcss": "^0.1.3"
+    "beamcss": "workspace:*"
   },
   "devDependencies": {
     "postcss": "^8.5.6",
