@@ -13,7 +13,7 @@ dependencies = [
 
 [[package]]
 name = "beam_cli"
-version = "0.1.0"
+version = "0.1.2"
 dependencies = [
  "beam_core",
  "json5",
@@ -22,14 +22,14 @@ dependencies = [
 
 [[package]]
 name = "beam_core"
-version = "0.1.0"
+version = "0.1.2"
 dependencies = [
  "serde",
 ]
 
 [[package]]
 name = "beam_node"
-version = "0.1.0"
+version = "0.1.2"
 dependencies = [
  "beam_core",
  "napi",

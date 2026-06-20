@@ -1,6 +1,6 @@
 # beamcss
 
-**Atomic CSS without the class wall.**
+**[beamcss.dev](https://beamcss.dev)** — Atomic CSS without the class wall.
 
 Beam compiles utility class strings to atomic CSS under cascade layers. **Variant grouping** lets you factor repeated prefixes — `hover:(bg-accent text-on-accent scale-105)` instead of three separate `hover:` classes. **Utility grouping** compresses related declarations — `padding:(16 top:24)` expands to `p-16 pt-24`. Everything is author-time sugar that becomes plain atoms at ship time, deduped globally, zero runtime cost.
 
@@ -30,7 +30,13 @@ Node 18+ required. Uses a prebuilt napi-rs `.node` addon — no subprocess, sub-
 
 ## Quick start
 
-**`beam.config.ts`**
+**1. Install**
+
+```sh
+npm install beamcss @beamcss/vite
+```
+
+**2. Create `beam.config.ts`**
 
 ```ts
 import { defineConfig } from 'beamcss'
@@ -54,22 +60,23 @@ export default defineConfig({
 })
 ```
 
-**`vite.config.ts`**
+**3. Add the Vite plugin to `vite.config.ts`**
 
 ```ts
+import { defineConfig } from 'vite'
 import { beamcss } from '@beamcss/vite'
 
-export default {
+export default defineConfig({
   plugins: [
     beamcss({
       config: './beam.config.ts',
-      content: ['./src/**/*.{html,tsx,jsx,vue,svelte}'],
+      content: ['./src'],   // directory or file paths to scan for class strings
     }),
   ],
-}
+})
 ```
 
-**Markup**
+**4. Write markup**
 
 ```html
 <main class="grid place-center h-screen bg-base text-fg font-ui">
@@ -80,6 +87,8 @@ export default {
   </section>
 </main>
 ```
+
+That's it — Beam scans `./src`, compiles only what you use, and injects atomic CSS into the page. No `@import` or virtual module needed.
 
 ---
 
@@ -196,7 +205,7 @@ Every class string compiles to one declaration per atom, globally deduped.
 
 ## Links
 
-- [Full docs & syntax reference](https://github.com/garrettsiegel/beamcss#readme)
+- [beamcss.dev](https://beamcss.dev) — full docs & syntax reference
 - [GitHub](https://github.com/garrettsiegel/beamcss)
 - [Vite plugin: @beamcss/vite](https://www.npmjs.com/package/@beamcss/vite)
 - [PostCSS plugin: @beamcss/postcss](https://www.npmjs.com/package/@beamcss/postcss)

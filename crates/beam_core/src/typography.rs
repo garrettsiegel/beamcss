@@ -6,7 +6,13 @@ use crate::{
 
 pub(crate) fn text_declaration(value: &str, config: &BeamConfig) -> Result<String, String> {
     match value {
-        "left" | "center" | "right" => return Ok(format!("text-align:{value}")),
+        "left" | "center" | "right" | "justify" => return Ok(format!("text-align:{value}")),
+        "ellipsis" => return Ok("text-overflow:ellipsis".to_owned()),
+        "clip" => return Ok("text-overflow:clip".to_owned()),
+        "wrap" => return Ok("text-wrap:wrap".to_owned()),
+        "nowrap" => return Ok("text-wrap:nowrap".to_owned()),
+        "balance" => return Ok("text-wrap:balance".to_owned()),
+        "pretty" => return Ok("text-wrap:pretty".to_owned()),
         _ => {}
     }
 

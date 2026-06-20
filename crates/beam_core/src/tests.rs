@@ -342,6 +342,77 @@ fn compiles_homepage_utility_surface() {
 }
 
 #[test]
+fn compiles_common_tailwind_utilities() {
+    let result = compile(
+        &config(),
+        &[
+            "inline inline-flex inline-grid contents flow-root static visible invisible".into(),
+            "outline outline-none outline-dashed outline-2 outline-accent outline-offset-2".into(),
+            "rounded rounded-none rounded-full".into(),
+            "underline line-through italic not-italic lowercase capitalize normal-case".into(),
+            "truncate whitespace-nowrap whitespace-pre break-words break-all".into(),
+            "text-ellipsis text-balance text-wrap text-nowrap text-justify".into(),
+            "transition transition-none transition-colors transition-opacity ease-in ease-out ease-in-out duration-300 delay-150".into(),
+            "object-cover object-contain object-center object-top aspect-square aspect-video".into(),
+            "select-none select-all pointer-events-none pointer-events-auto".into(),
+            "sr-only not-sr-only box-border box-content resize resize-none appearance-none".into(),
+            "overflow-scroll overflow-visible overflow-x-hidden overflow-y-scroll".into(),
+            "cursor-default cursor-not-allowed cursor-grab".into(),
+            "shadow-none decoration-accent".into(),
+        ],
+    );
+
+    assert!(result.errors.is_empty(), "{:?}", result.errors);
+    assert!(result.css.contains(".inline{display:inline;}"));
+    assert!(result.css.contains(".inline-flex{display:inline-flex;}"));
+    assert!(result.css.contains(".inline-grid{display:inline-grid;}"));
+    assert!(result.css.contains(".contents{display:contents;}"));
+    assert!(result.css.contains(".static{position:static;}"));
+    assert!(result.css.contains(".visible{visibility:visible;}"));
+    assert!(result.css.contains(".invisible{visibility:hidden;}"));
+    assert!(result.css.contains(".outline{outline-width:1px;outline-style:solid;}"));
+    assert!(result.css.contains(".outline-none{outline:none;}"));
+    assert!(result.css.contains(".outline-2{outline-width:2px;outline-style:solid;}"));
+    assert!(result.css.contains(".outline-accent{outline-color:var(--color-accent);}"));
+    assert!(result.css.contains(".outline-offset-2{outline-offset:2px;}"));
+    assert!(result.css.contains(".rounded{border-radius:0.25rem;}"));
+    assert!(result.css.contains(".rounded-none{border-radius:0;}"));
+    assert!(result.css.contains(".rounded-full{border-radius:9999px;}"));
+    assert!(result.css.contains(".underline{text-decoration-line:underline;}"));
+    assert!(result.css.contains(".line-through{text-decoration-line:line-through;}"));
+    assert!(result.css.contains(".italic{font-style:italic;}"));
+    assert!(result.css.contains(".not-italic{font-style:normal;}"));
+    assert!(result.css.contains(".lowercase{text-transform:lowercase;}"));
+    assert!(result.css.contains(".capitalize{text-transform:capitalize;}"));
+    assert!(result.css.contains(".truncate{overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}"));
+    assert!(result.css.contains(".whitespace-nowrap{white-space:nowrap;}"));
+    assert!(result.css.contains(".break-all{word-break:break-all;}"));
+    assert!(result.css.contains(".text-ellipsis{text-overflow:ellipsis;}"));
+    assert!(result.css.contains(".text-balance{text-wrap:balance;}"));
+    assert!(result.css.contains(".text-justify{text-align:justify;}"));
+    assert!(result.css.contains("transition-property:color,background-color,"));
+    assert!(result.css.contains(".transition-none{transition-property:none;}"));
+    assert!(result.css.contains(".duration-300{transition-duration:300ms;}"));
+    assert!(result.css.contains(".delay-150{transition-delay:150ms;}"));
+    assert!(result.css.contains(".ease-in-out{transition-timing-function:cubic-bezier(0.4,0,0.2,1);}"));
+    assert!(result.css.contains(".object-cover{object-fit:cover;}"));
+    assert!(result.css.contains(".object-center{object-position:center;}"));
+    assert!(result.css.contains(".aspect-square{aspect-ratio:1/1;}"));
+    assert!(result.css.contains(".aspect-video{aspect-ratio:16/9;}"));
+    assert!(result.css.contains(".select-none{user-select:none;}"));
+    assert!(result.css.contains(".pointer-events-none{pointer-events:none;}"));
+    assert!(result.css.contains(".sr-only{position:absolute;"));
+    assert!(result.css.contains(".box-border{box-sizing:border-box;}"));
+    assert!(result.css.contains(".resize-none{resize:none;}"));
+    assert!(result.css.contains(".appearance-none{appearance:none;}"));
+    assert!(result.css.contains(".overflow-scroll{overflow:scroll;}"));
+    assert!(result.css.contains(".overflow-x-hidden{overflow-x:hidden;}"));
+    assert!(result.css.contains(".cursor-not-allowed{cursor:not-allowed;}"));
+    assert!(result.css.contains(".shadow-none{box-shadow:none;}"));
+    assert!(result.css.contains(".decoration-accent{text-decoration-color:var(--color-accent);}"));
+}
+
+#[test]
 fn reports_unsupported_utilities_without_panicking() {
     let result = compile(&config(), &["unknown".into()]);
 
