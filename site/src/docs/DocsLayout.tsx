@@ -5,15 +5,17 @@ import { Footer } from '../components/Footer'
 import { DocsSidebar } from './DocsSidebar'
 import { OnThisPage } from './OnThisPage'
 import { docsPages } from './docsNav'
+import { applyRouteSeo } from '../seo'
 
 export function DocsLayout() {
   const { pathname } = useLocation()
   const [menuOpen, setMenuOpen] = useState(false)
 
-  // Scroll to top on page change and close the mobile drawer.
+  // Scroll to top on page change, close the mobile drawer, sync the document title.
   useEffect(() => {
     window.scrollTo(0, 0)
     setMenuOpen(false)
+    applyRouteSeo(pathname)
   }, [pathname])
 
   const slug = pathname.split('/').filter(Boolean).pop()

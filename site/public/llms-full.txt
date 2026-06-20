@@ -1,0 +1,111 @@
+# Beam CSS
+
+> Tailwind's authoring speed, without the wall of classes. Beam CSS is a utility-first CSS framework with a Rust compiler, grouped syntax, atomic output, and zero browser runtime.
+
+## Canonical resources
+- Website: https://beamcss.dev/
+- Docs: https://beamcss.dev/docs/introduction
+- GitHub: https://github.com/garrettsiegel/beamcss
+- npm: https://www.npmjs.com/package/beamcss
+- License: MIT
+
+## What Beam CSS does
+Beam CSS lets developers write compact utility class strings and compiles them into deduped atomic CSS under cascade layers. Its core goal is to keep utility-first authoring speed while reducing repetitive markup.
+
+Key capabilities:
+- Variant grouping: `hover:(bg-accent text-on-accent scale-105)` writes a repeated variant once.
+- Utility grouping: `padding:(16 top:24)` keeps related declarations together.
+- Dynamic values: `w-(--w)` binds a CSS custom property as a stable utility.
+- Config composition: tokens, shortcuts, recipes, presets, and utility modules.
+- Rust compiler: fast static CSS generation with a native napi-rs Node binding.
+- Zero runtime: compiled CSS ships to the browser; Beam itself does not.
+
+## Install
+Recommended Vite setup:
+
+```sh
+npm install beamcss @beamcss/vite
+```
+
+Minimal `beam.config.ts`:
+
+```ts
+import { defineConfig } from 'beamcss'
+
+export default defineConfig({
+  theme: {
+    colors: {
+      base: '#0e1116',
+      fg: '#f4f1ea',
+      accent: '#7dd3c7',
+    },
+  },
+})
+```
+
+Vite plugin:
+
+```ts
+import { defineConfig } from 'vite'
+import { beamcss } from '@beamcss/vite'
+
+export default defineConfig({
+  plugins: [beamcss({ config: './beam.config.ts' })],
+})
+```
+
+## Syntax examples
+Variant grouping:
+
+```tsx
+<button className="rounded-md px-4 py-2 hover:(bg-accent text-on-accent)">
+  Save
+</button>
+```
+
+Utility grouping:
+
+```html
+<section class="padding:(16 top:24 bottom:32)">
+  ...
+</section>
+```
+
+Dynamic values:
+
+```html
+<div class="w-(--panel-width) bg-base text-fg"></div>
+```
+
+## Packages
+- `beamcss`: core compiler, config types, CLI, native binding loader.
+- `@beamcss/vite`: Vite integration with build-time CSS injection and HMR.
+- `@beamcss/postcss`: PostCSS integration for non-Vite build systems.
+- `@beamcss/mcp`: MCP server exposing Beam compile, explain, and check tools.
+
+## CLI
+Useful commands:
+
+```sh
+beam init
+beam build --config ./beam.config.ts --content './src/**/*.{html,tsx,jsx}' --out ./public/beam.css
+beam dev --config ./beam.config.ts --content './src/**/*.{html,tsx,jsx}' --out ./public/beam.css
+beam check --config ./beam.config.ts --content './src/**/*.{html,tsx,jsx}' --format json
+beam explain "flex direction-column gap-4 hover:(bg-accent text-on-accent)" --format json
+```
+
+## Compiler model
+Beam parses class strings, unfolds grouped syntax, resolves tokens/configuration, and emits atomic CSS under the fixed layer order:
+
+```css
+@layer beam.reset, beam.tokens, beam.base, beam.utilities;
+```
+
+Each emitted utility is deduped globally, so repeated classes across markup do not create repeated CSS rules.
+
+## Agent workflow
+Beam is designed to be friendly to coding agents:
+- `beam check` validates generated class strings before UI is shown.
+- `beam explain` returns structured information about parsing, variants, atoms, selectors, declarations, and layers.
+- `@beamcss/mcp` exposes compiler operations as MCP tools.
+- This file and `llms.txt` summarize the project for AI and agent crawlers that choose to read them.

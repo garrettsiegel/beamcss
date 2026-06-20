@@ -1,0 +1,23 @@
+# Beam CSS
+
+> Tailwind's authoring speed, without the wall of classes. Beam is a utility-first CSS framework with a Rust compiler. Its signature feature — variant grouping — lets you factor a repeated prefix across many utilities (e.g. `hover:(bg-accent text-on-accent scale-105)`), so class strings read as grouped intent instead of repetitive soup. Everything compiles to deduped atomic CSS under cascade layers, with zero runtime shipped to the browser.
+
+## Key ideas
+- Variant grouping: `hover:(bg-accent text-on-accent)` factors a repeated variant across many utilities.
+- Utility grouping: `padding:(16 top:24)` keeps related declarations in one clause.
+- Dynamic values: `w-(--w)` binds a CSS variable at runtime with one stable, atomic class.
+- Config composition: tokens, shortcuts, recipes, presets, and tree-shakeable utility modules.
+- Rust compiler with a native napi-rs binding; output is static atomic CSS under `@layer`.
+
+## Docs
+- [Introduction](https://beamcss.dev/docs/introduction): What Beam is and why variant grouping removes the class wall.
+- [Installation](https://beamcss.dev/docs/installation): Set up with Vite, PostCSS, or the CLI.
+- [Configuration](https://beamcss.dev/docs/configuration): beam.config.ts — tokens, shortcuts, recipes, presets, utility modules.
+- [Writing styles](https://beamcss.dev/docs/syntax): The class-string grammar — variant grouping, utility grouping, values, color algebra.
+- [Utilities reference](https://beamcss.dev/docs/utilities): Spacing, sizing, colors, typography, layout, grid, effects.
+- [CLI & integrations](https://beamcss.dev/docs/tooling): CLI, Vite/PostCSS plugins, native Node binding, MCP server.
+
+## Resources
+- [GitHub](https://github.com/garrettsiegel/beamcss)
+- [npm](https://www.npmjs.com/package/beamcss)
+- [Examples](https://github.com/garrettsiegel/beamcss/tree/main/examples)
