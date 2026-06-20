@@ -21,7 +21,7 @@ export function Tooling() {
           <tr><td><code>beam explain</code></td><td>Show how a class string parses and compiles</td></tr>
         </tbody>
       </table>
-      <CodeBlock title="terminal">{`beam check --config ./beam.config.ts --content './src/**/*.{html,tsx,jsx}' --format json`}</CodeBlock>
+      <CodeBlock title="terminal">{`beam check --config ./beam.config.ts --content ./src --format json`}</CodeBlock>
       <CodeBlock title="output">{`{
   "valid": true,
   "class_string_count": 42,
@@ -41,7 +41,7 @@ export default {
   plugins: [
     beamcss({
       config: './beam.config.ts',
-      content: ['./src/**/*.{html,tsx,jsx,vue,svelte,astro}'],
+      content: ['./src'],
     }),
   ],
 }`}</CodeBlock>
@@ -51,7 +51,7 @@ export default {
   plugins: {
     '@beamcss/postcss': {
       config: './beam.config.ts',
-      content: ['./src/**/*.{html,tsx,jsx}'],
+      content: ['./src'],
     },
   },
 }`}</CodeBlock>

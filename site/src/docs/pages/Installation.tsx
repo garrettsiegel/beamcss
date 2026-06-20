@@ -53,7 +53,7 @@ export default {
   plugins: [
     beamcss({
       config: './beam.config.ts',
-      content: ['./src/**/*.{html,tsx,jsx,vue,svelte}'],
+      content: ['./src'],
     }),
   ],
 }`}</CodeBlock>
@@ -77,7 +77,7 @@ export default {
   plugins: {
     '@beamcss/postcss': {
       config: './beam.config.ts',
-      content: ['./src/**/*.{html,tsx,jsx}'],
+      content: ['./src'],
     },
   },
 }`}</CodeBlock>
@@ -91,10 +91,10 @@ export default {
 npx beam init --template vite
 
 # one-off build
-npx beam build --config ./beam.config.ts --content './src/**/*.{html,tsx,jsx}' --out ./dist/beam.css
+npx beam build --config ./beam.config.ts --content ./src --out ./dist/beam.css
 
 # watch mode
-npx beam dev --config ./beam.config.ts --content './src/**/*.{html,tsx,jsx}' --out ./public/beam.css`}</CodeBlock>
+npx beam dev --config ./beam.config.ts --content ./src --out ./public/beam.css`}</CodeBlock>
 
       <p>
         See <Link to="/docs/configuration">Configuration</Link> to flesh out your design tokens,

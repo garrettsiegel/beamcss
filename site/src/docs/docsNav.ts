@@ -1,5 +1,6 @@
 import type { ComponentType } from 'react'
 import { Introduction } from './pages/Introduction'
+import { QuickStart } from './pages/QuickStart'
 import { Installation } from './pages/Installation'
 import { Configuration } from './pages/Configuration'
 import { Syntax } from './pages/Syntax'
@@ -16,6 +17,7 @@ export interface DocPage {
 /** Ordered single source of truth for routes, sidebar, and prev/next. */
 export const docsPages: DocPage[] = [
   { slug: 'introduction', title: 'Introduction', group: 'Getting started', Component: Introduction },
+  { slug: 'quick-start', title: 'Quick start', group: 'Getting started', Component: QuickStart },
   { slug: 'installation', title: 'Installation', group: 'Getting started', Component: Installation },
   { slug: 'configuration', title: 'Configuration', group: 'Getting started', Component: Configuration },
   { slug: 'syntax', title: 'Writing styles', group: 'Core concepts', Component: Syntax },
