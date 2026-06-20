@@ -18,7 +18,7 @@ const docDescriptions: Record<string, string> = {
   introduction:
     'What Beam CSS is and why variant grouping removes the wall of classes from utility CSS.',
   installation:
-    'Install Beam CSS with Vite, PostCSS, or the CLI — a working setup in under a minute.',
+    'Install Beam CSS with Vite, PostCSS, or the CLI - a working setup in under a minute.',
   configuration:
     'Configure beam.config.ts: tokens, shortcuts, recipes, presets, and tree-shakeable utility modules.',
   syntax:
@@ -33,9 +33,9 @@ type RouteSeoInput = Omit<RouteSeo, 'canonicalUrl' | 'structuredData'>
 
 const HOME: RouteSeoInput = {
   path: '/',
-  title: 'Beam CSS — Atomic CSS without the class wall',
+  title: 'Beam CSS - Atomic CSS without the class wall',
   description:
-    "Tailwind's authoring speed, without the wall of classes. A utility-first CSS framework with a Rust compiler — group repeated variants and ship zero-runtime atomic CSS.",
+    "Tailwind's authoring speed, without the wall of classes. A utility-first CSS framework with a Rust compiler - group repeated variants and ship zero-runtime atomic CSS.",
 }
 
 const WEBSITE_ID = `${SITE_URL}/#website`
@@ -77,7 +77,7 @@ export function structuredDataForRoute(
         operatingSystem: 'Cross-platform',
         offers: { '@type': 'Offer', price: '0', priceCurrency: 'USD' },
         description:
-          "Tailwind's authoring speed, without the wall of classes. A utility-first CSS framework with a Rust compiler — variant grouping, atomic output, zero runtime.",
+          "Tailwind's authoring speed, without the wall of classes. A utility-first CSS framework with a Rust compiler - variant grouping, atomic output, zero runtime.",
         softwareVersion: '0.1.1',
         license: 'https://github.com/garrettsiegel/beamcss/blob/main/LICENSE',
         sameAs: [
@@ -124,7 +124,7 @@ export const routesSeo: RouteSeo[] = [
   makeRouteSeo(HOME),
   ...docsPages.map((p) => ({
     path: `/docs/${p.slug}`,
-    title: `${p.title} — ${SITE_NAME}`,
+    title: `${p.title} - ${SITE_NAME}`,
     description: docDescriptions[p.slug] ?? HOME.description,
   })).map(makeRouteSeo),
 ]

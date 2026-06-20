@@ -97,7 +97,7 @@ export function Utilities() {
       <h2 id="position">Position / inset</h2>
       <p>
         <code>top-*</code>, <code>right-*</code>, <code>bottom-*</code>, <code>left-*</code>,{' '}
-        <code>inset-*</code>, <code>inset-x-*</code>, <code>inset-y-*</code> — all accept numeric
+        <code>inset-*</code>, <code>inset-x-*</code>, <code>inset-y-*</code> - all accept numeric
         (px), token, or arbitrary values.
       </p>
 

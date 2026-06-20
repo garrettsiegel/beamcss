@@ -1,4 +1,4 @@
-/* pre elements in flex/grid containers overflow by default — fix globally */
+/* pre elements in flex/grid containers overflow by default - fix globally */
 @font-face {
   font-family: 'Mionta';
   src: url('/fonts/mionta-clean.woff2') format('woff2');
@@ -228,12 +228,12 @@ body::before {
   font-size: var(--text-sm);
 }
 
-/* Capability cards — smooth the hover border-color change */
+/* Capability cards - smooth the hover border-color change */
 [data-capability-card] {
   transition: border-color 300ms ease-in-out;
 }
 
-/* Reusable pill — small rounded label tinted with the brand accent */
+/* Reusable pill - small rounded label tinted with the brand accent */
 [data-pill] {
   display: inline-flex;
   align-items: center;
@@ -445,7 +445,7 @@ body::before {
   color: var(--color-accent);
 }
 
-/* Mobile menu toggle — hidden on desktop */
+/* Mobile menu toggle - hidden on desktop */
 [data-docs-menu-toggle] {
   display: none;
 }
@@ -718,7 +718,7 @@ body::before {
 }
 
 /* ============================================================
-   Liquid metal buttons — solid dark body, metal ring border
+   Liquid metal buttons - solid dark body, metal ring border
    ============================================================ */
 
 /* Animatable angle drives the rotating conic-gradient ring. */
@@ -746,7 +746,7 @@ body::before {
     box-shadow 240ms ease;
 }
 
-/* metal ring — fills the whole box; the body (::after) covers the center,
+/* metal ring - fills the whole box; the body (::after) covers the center,
    leaving a 2px ring. Dimmed until hover. */
 [data-liquid-metal]::before {
   content: '';
@@ -774,7 +774,7 @@ body::before {
   }
 }
 
-/* Primary — brand-forward teal/mint metal over a dark-teal body.
+/* Primary - brand-forward teal/mint metal over a dark-teal body.
    Stays within the site palette (teal #7dd3c7 + success green #9ad8aa);
    the near-white mint stop is the metallic specular glint. */
 [data-liquid-metal='primary']::before {
@@ -793,7 +793,7 @@ body::before {
   background: linear-gradient(180deg, #16302d 0%, #060f0d 100%);
 }
 
-/* Secondary — neutral steel-chrome metal over a neutral dark body */
+/* Secondary - neutral steel-chrome metal over a neutral dark body */
 [data-liquid-metal='secondary']::before {
   background: conic-gradient(
     from var(--lm-angle),
@@ -810,7 +810,7 @@ body::before {
   background: linear-gradient(180deg, #242428 0%, #09090b 100%);
 }
 
-/* Hover — scale up; the ring brightens and spins. */
+/* Hover - scale up; the ring brightens and spins. */
 [data-liquid-metal]:hover {
   transform: scale(1.04);
 }

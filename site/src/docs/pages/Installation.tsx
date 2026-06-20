@@ -58,7 +58,7 @@ export default {
   ],
 }`}</CodeBlock>
 
-      <p>Now write markup — the plugin scans your files and injects the compiled CSS:</p>
+      <p>Now write markup - the plugin scans your files and injects the compiled CSS:</p>
       <CodeBlock title="index.html">{`<main class="grid place-center h-screen bg-base text-fg font-ui">
   <section class="flex direction-column align-center gap-4 p-6 bg-surface rounded-md
                   hover:(bg-surface+8 scale-105)

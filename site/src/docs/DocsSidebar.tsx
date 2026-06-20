@@ -2,7 +2,7 @@ import { NavLink } from 'react-router-dom'
 import { docsGroups } from './docsNav'
 
 interface DocsSidebarProps {
-  /** Called when a link is chosen — used to close the mobile drawer. */
+  /** Called when a link is chosen - used to close the mobile drawer. */
   onNavigate?: () => void
 }
 

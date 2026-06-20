@@ -5,7 +5,7 @@ export function Tooling() {
     <article data-docs-prose>
       <h1>CLI &amp; integrations</h1>
       <p data-docs-lede>
-        Beam ships a CLI, bundler plugins, a native Node binding, and agent-native surfaces — all
+        Beam ships a CLI, bundler plugins, a native Node binding, and agent-native surfaces - all
         backed by the same Rust compiler.
       </p>
 
@@ -16,7 +16,7 @@ export function Tooling() {
         <tbody>
           <tr><td><code>beam init</code></td><td>Scaffold config, install packages, wire the plugin (<code>--template vite</code>)</td></tr>
           <tr><td><code>beam build</code></td><td>Scan files, compile class strings, write CSS</td></tr>
-          <tr><td><code>beam dev</code></td><td>Watch mode — rebuild on source/config change</td></tr>
+          <tr><td><code>beam dev</code></td><td>Watch mode - rebuild on source/config change</td></tr>
           <tr><td><code>beam check</code></td><td>Validate every class string compiles; structured report, CI-friendly</td></tr>
           <tr><td><code>beam explain</code></td><td>Show how a class string parses and compiles</td></tr>
         </tbody>
@@ -58,7 +58,7 @@ export default {
 
       <h2 id="native-binding">Native Node binding</h2>
       <p>
-        The <code>beamcss</code> package ships a prebuilt napi-rs <code>.node</code> addon — the
+        The <code>beamcss</code> package ships a prebuilt napi-rs <code>.node</code> addon - the
         same approach as Lightning CSS and Tailwind Oxide. <code>compile</code> and{' '}
         <code>explain</code> are synchronous, thread-safe, and stateless.
       </p>
@@ -68,21 +68,21 @@ const result = compile(config, [
   'flex direction-column align-center gap-4 hover:(bg-accent text-on-accent)',
 ])
 console.log(result.css)    // full CSS string
-console.log(result.errors) // CompileMessage[] — { class_name, message }`}</CodeBlock>
+console.log(result.errors) // CompileMessage[] - { class_name, message }`}</CodeBlock>
 
       <h2 id="agents">Agent-native surfaces</h2>
       <p>Beam is designed to work well with AI coding agents.</p>
       <ul>
         <li>
-          <strong><code>beam check</code> as a preflight gate</strong> — run before showing
+          <strong><code>beam check</code> as a preflight gate</strong> - run before showing
           AI-generated UI; a clean result means every class resolves against the tokens.
         </li>
         <li>
-          <strong><code>beam explain</code> for debugging</strong> — returns the full parse tree
+          <strong><code>beam explain</code> for debugging</strong> - returns the full parse tree
           (variants, atoms, selectors, declarations, layers) as structured JSON.
         </li>
         <li>
-          <strong><code>@beamcss/mcp</code></strong> — exposes <code>compile</code>,{' '}
+          <strong><code>@beamcss/mcp</code></strong> - exposes <code>compile</code>,{' '}
           <code>explain</code>, and <code>check</code> as MCP tools, callable directly via tool use.
         </li>
         <li>
@@ -93,12 +93,12 @@ console.log(result.errors) // CompileMessage[] — { class_name, message }`}</Co
 
       <h2 id="cascade-layers">Cascade layers</h2>
       <p>
-        All output is emitted under named <code>@layer</code> rules for predictable specificity —
+        All output is emitted under named <code>@layer</code> rules for predictable specificity -
         you never fight <code>!important</code>. The order is fixed:
       </p>
       <CodeBlock title="CSS">{`@layer beam.reset, beam.tokens, beam.base, beam.utilities;`}</CodeBlock>
       <p>
-        Every utility emits exactly one rule globally — <code>gap-4</code> appears once regardless
+        Every utility emits exactly one rule globally - <code>gap-4</code> appears once regardless
         of how many elements reference it.
       </p>
     </article>

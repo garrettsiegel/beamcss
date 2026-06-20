@@ -7,7 +7,7 @@ export function Configuration() {
       <h1>Configuration</h1>
       <p data-docs-lede>
         All configuration lives in a single <code>beam.config.ts</code>. Beam extracts it at
-        build time with a brace-balanced JSON5 parser — no <code>ts-node</code> or dynamic import
+        build time with a brace-balanced JSON5 parser - no <code>ts-node</code> or dynamic import
         required.
       </p>
 
@@ -78,7 +78,7 @@ export default defineConfig({
       <CodeBlock>{`<article class="card hover:(bg-surface+8 scale-105)">
 <div class="center h-screen">`}</CodeBlock>
       <p>
-        The shortcut class name becomes the CSS selector — <code>hover:card</code> applies all of
+        The shortcut class name becomes the CSS selector - <code>hover:card</code> applies all of
         <code>card</code>'s atoms under <code>:hover</code>.
       </p>
 
@@ -105,7 +105,7 @@ export default defineConfig({
       <h2 id="presets">Presets</h2>
       <p>
         Plain config fragments merged before local config. Local tokens, shortcuts, recipes, and
-        utility flags always win over preset values. Presets are plain objects — no plugins API,
+        utility flags always win over preset values. Presets are plain objects - no plugins API,
         no side effects.
       </p>
       <CodeBlock title="beam.config.ts">{`export default defineConfig({
@@ -135,7 +135,7 @@ export default defineConfig({
   effects: true,     // opacity, scale, shadow
 }`}</CodeBlock>
       <p>
-        Disabled utilities produce a compile error rather than silently emitting nothing — so
+        Disabled utilities produce a compile error rather than silently emitting nothing - so
         misconfiguration is visible at build time, not in the browser.
       </p>
 

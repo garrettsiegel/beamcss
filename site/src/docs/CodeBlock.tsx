@@ -18,7 +18,7 @@ export function CodeBlock({ children, title }: CodeBlockProps) {
       setCopied(true)
       setTimeout(() => setCopied(false), 1500)
     } catch {
-      /* clipboard unavailable — ignore */
+      /* clipboard unavailable - ignore */
     }
   }
 

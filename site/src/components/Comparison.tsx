@@ -10,7 +10,7 @@ export function Comparison() {
           <h2 className="text-2xl font-bold text-fg">Same output. Half the noise.</h2>
           <p className="text-base text-muted max-w-[42rem]">
             Variant grouping lets you write one prefix for a whole group of utilities.
-            The compiler expands it — identical CSS, far less markup to read, and zero
+            The compiler expands it - identical CSS, far less markup to read, and zero
             runtime overhead.
           </p>
         </div>

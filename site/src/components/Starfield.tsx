@@ -1,7 +1,7 @@
 import { useEffect, useRef } from 'react'
 
 const ACCENT = '#7dd3c7'
-// Exact "Standard" charset from asciiart.eu — index 0 = far/faint, last = close/bright
+// Exact "Standard" charset from asciiart.eu - index 0 = far/faint, last = close/bright
 const CHARSET = ' .:+*#@'
 
 interface Star {

@@ -32,7 +32,7 @@ export function Hero() {
 
             <p data-hero-lede className="text-base text-muted">
               A utility-first CSS framework with a Rust compiler. Write a repeated
-              variant once and Beam expands it into clean, atomic CSS — nothing ships
+              variant once and Beam expands it into clean, atomic CSS - nothing ships
               to the browser but the styles.
             </p>
 

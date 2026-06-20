@@ -13,7 +13,7 @@ export function Syntax() {
       <h2 id="variant-grouping">Variant grouping</h2>
       <p>
         The signature feature. Factor any repeated variant prefix out of a class string with{' '}
-        <code>variant:(utilities)</code>. Both forms compile to identical atomic CSS — the group
+        <code>variant:(utilities)</code>. Both forms compile to identical atomic CSS - the group
         is author-time sugar that never reaches the browser.
       </p>
       <CodeBlock>{`<!-- without grouping -->
@@ -23,7 +23,7 @@ export function Syntax() {
 <nav class="hover:(bg-accent text-on-accent scale-105 shadow-lg)">`}</CodeBlock>
 
       <h3 id="stacking">Stacking</h3>
-      <p>Chain variants with <code>:</code> — all conditions must hold. Read outer → inner.</p>
+      <p>Chain variants with <code>:</code> - all conditions must hold. Read outer → inner.</p>
       <CodeBlock>{`<!-- at tablet breakpoint AND on hover -->
 <div class="tablet:hover:(bg-surface scale-105)">
 
@@ -90,7 +90,7 @@ w-[347px]  h-[100dvh]  cols-[200px_1fr]  bg-[oklch(72%_0.14_240)]`}</CodeBlock>
       <h3 id="dynamic">Dynamic values</h3>
       <p>
         Write <code>utility-(--var-name)</code> to read a CSS custom property at runtime. The
-        compiled class is stable regardless of the runtime value — no safelists, no dynamic class
+        compiled class is stable regardless of the runtime value - no safelists, no dynamic class
         generation.
       </p>
       <CodeBlock title="React">{`import { vars } from 'beamcss'

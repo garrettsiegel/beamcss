@@ -2,7 +2,7 @@ const grammar = [
   {
     title: 'Variant grouping',
     snippet: 'hover:(bg-accent text-on-accent)',
-    desc: 'Factor a repeated prefix across many utilities — hover, focus, responsive, dark.',
+    desc: 'Factor a repeated prefix across many utilities - hover, focus, responsive, dark.',
   },
   {
     title: 'Utility grouping',
@@ -19,7 +19,7 @@ const grammar = [
 const platform = [
   {
     title: 'Rust core',
-    desc: 'Compiles in milliseconds via a native napi-rs binding — no subprocess, no cold start.',
+    desc: 'Compiles in milliseconds via a native napi-rs binding - no subprocess, no cold start.',
   },
   {
     title: 'Zero runtime',
