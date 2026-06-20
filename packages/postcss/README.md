@@ -1,6 +1,6 @@
 # @beamcss/postcss
 
-PostCSS plugin for [Beam CSS](https://www.npmjs.com/package/beamcss) — works with webpack, Parcel, Next.js, and any PostCSS-based build pipeline.
+**[beamcss.dev](https://beamcss.dev)** — PostCSS plugin for [Beam CSS](https://www.npmjs.com/package/beamcss). Works with webpack, Parcel, Next.js, and any PostCSS-based build pipeline.
 
 ## Install
 
@@ -18,7 +18,7 @@ export default {
   plugins: [
     beamcss({
       config: './beam.config.ts',
-      content: ['./src/**/*.{html,tsx,jsx,vue,svelte}'],
+      content: ['./src'],   // directory or file paths to scan — not globs
     }),
   ],
 }
@@ -30,7 +30,7 @@ module.exports = {
   plugins: [
     require('@beamcss/postcss')({
       config: './beam.config.ts',
-      content: ['./src/**/*.{html,tsx,jsx}'],
+      content: ['./src'],   // directory or file paths to scan — not globs
     }),
   ],
 }
@@ -43,7 +43,9 @@ The plugin runs as a PostCSS `Once` plugin: it scans your source files for Beam 
 | Option | Type | Default | Description |
 |---|---|---|---|
 | `config` | `string` | `"beam.config.ts"` | Path to your Beam config file |
-| `content` | `string[]` | `["."]` | Glob patterns for source files to scan |
+| `content` | `string[]` | `["."]` | Directories or files to scan for class strings |
+
+> **Note:** `content` accepts directory paths and file paths, not glob patterns. Pass `['./src']` to scan your entire src folder recursively.
 
 ## Peer dependency
 
@@ -53,6 +55,7 @@ postcss >= 8
 
 ## Links
 
+- [beamcss.dev](https://beamcss.dev) — full docs & syntax reference
 - [beamcss (core)](https://www.npmjs.com/package/beamcss)
 - [GitHub](https://github.com/garrettsiegel/beamcss)
 - License: MIT
