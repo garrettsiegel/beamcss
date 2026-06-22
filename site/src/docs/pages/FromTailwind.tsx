@@ -97,7 +97,7 @@ export function FromTailwind() {
 
 <!-- Beam: prefix lives once, group expands at build time -->
 <button class="rounded-md px-4 py-2 bg-accent text-on-accent
-  hover:(bg-accent-20 shadow-lg scale-105)">`}</CodeBlock>
+  hover:(bg-accent+12 shadow-lg scale-105)">`}</CodeBlock>
       <p>
         Variants stack — <code>tablet:hover:(bg-surface scale-105)</code> means "at tablet
         breakpoint AND on hover".
@@ -155,7 +155,9 @@ bg-accent/50   → color-mix(in oklab, var(--color-accent) 50%, transparent)`}</
         If you want to keep writing <code>flex-col</code> and <code>items-center</code> during a
         migration, define them as shortcuts in your config:
       </p>
-      <CodeBlock title="beam.config.ts">{`export default defineConfig({
+      <CodeBlock title="beam.config.ts">{`import { defineConfig } from 'beamcss'
+
+export default defineConfig({
   shortcuts: {
     'flex-col':    'direction-column',
     'flex-row':    'direction-row',

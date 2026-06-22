@@ -33,7 +33,12 @@ fn collect_path(path: &Path, files: &mut Vec<PathBuf>) -> io::Result<()> {
         return Ok(());
     }
 
-    if !path.is_dir() || ignored_dir(path) {
+    if !path.is_dir() {
+        eprintln!("[beam] content path not found: {}", path.display());
+        return Ok(());
+    }
+
+    if ignored_dir(path) {
         return Ok(());
     }
 

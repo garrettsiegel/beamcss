@@ -1,3 +1,5 @@
+import { Link } from 'react-router-dom'
+
 export function Comparison() {
   return (
     <section className="py-2xl px-lg border-t border-line">
@@ -39,7 +41,7 @@ export function Comparison() {
   bg-accent
   text-on-accent</span>
 <span className="text-success">  hover:(
-    bg-accent-20
+    bg-accent+12
     shadow-lg
     scale-105
   )</span><span className="text-muted">&quot;&gt;</span></code></pre>
@@ -63,7 +65,7 @@ export function Comparison() {
               shorthand. <code>flex-col</code> becomes <code>direction-column</code>,{' '}
               <code>items-center</code> becomes <code>align-center</code>. Once you know the
               pattern, the CSS spec is your cheat sheet.{' '}
-              <a href="/docs/from-tailwind" style={{ color: 'var(--color-accent)' }}>Full mapping →</a>
+              <Link to="/docs/from-tailwind" style={{ color: 'var(--color-accent)' }}>Full mapping →</Link>
             </p>
           </div>
 

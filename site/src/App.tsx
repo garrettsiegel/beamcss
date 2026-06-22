@@ -8,7 +8,7 @@ export default function App() {
     <Routes>
       <Route path="/" element={<Landing />} />
       <Route path="/docs" element={<Navigate to={`/docs/${DEFAULT_DOC}`} replace />} />
-      <Route path="/docs" element={<DocsLayout />}>
+      <Route path="/docs/*" element={<DocsLayout />}>
         {docsPages.map(({ slug, Component }) => (
           <Route key={slug} path={slug} element={<Component />} />
         ))}

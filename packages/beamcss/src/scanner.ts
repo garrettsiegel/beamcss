@@ -63,7 +63,10 @@ async function collectFiles(paths: string[]): Promise<string[]> {
 
 async function collectPath(path: string): Promise<string[]> {
   const details = await stat(path).catch(() => undefined)
-  if (!details) return []
+  if (!details) {
+    console.warn(`[beamcss] content path not found: ${path}`)
+    return []
+  }
 
   if (details.isFile()) {
     return supportedExtensions.has(extname(path)) ? [path] : []

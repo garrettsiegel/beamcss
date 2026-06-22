@@ -365,7 +365,8 @@ body::before {
   margin-top: 24px;
 }
 
-[data-docs-sidebar-heading] {
+[data-docs-sidebar-heading],
+[data-docs-toc-heading] {
   margin: 0 0 8px;
   font-family: var(--font-mono);
   font-size: 11px;
@@ -413,15 +414,6 @@ body::before {
   align-self: start;
   max-height: calc(100vh - var(--docs-top) - 24px);
   overflow-y: auto;
-}
-
-[data-docs-toc-heading] {
-  margin: 0 0 8px;
-  font-family: var(--font-mono);
-  font-size: 11px;
-  letter-spacing: 0.08em;
-  text-transform: uppercase;
-  color: var(--color-muted);
 }
 
 [data-docs-toc] ul {
@@ -728,8 +720,10 @@ body::before {
   margin: 0 0 28px;
   border-radius: var(--radius-md);
   background: color-mix(in srgb, var(--color-accent) 8%, var(--color-surface));
-  border: 1px solid color-mix(in srgb, var(--color-accent) 30%, var(--color-line));
-  border-left: 3px solid var(--color-accent);
+  border-width: 1px 1px 1px 3px;
+  border-style: solid;
+  border-color: color-mix(in srgb, var(--color-accent) 30%, var(--color-line));
+  border-left-color: var(--color-accent);
   font-size: var(--text-sm);
   line-height: 1.6;
   color: var(--color-muted);

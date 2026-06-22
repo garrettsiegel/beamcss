@@ -1,5 +1,6 @@
 import { Link } from 'react-router-dom'
 import { CodeBlock } from '../CodeBlock'
+import { Callout } from '../Callout'
 
 export function QuickStart() {
   return (
@@ -10,19 +11,16 @@ export function QuickStart() {
         setups see <Link to="/docs/installation">Installation</Link>.
       </p>
 
-      <div data-callout>
-        <span data-callout-icon aria-hidden="true">⇄</span>
-        <div data-callout-body>
-          <strong>Coming from Tailwind?</strong>
-          Most utilities are identical, but a few layout names differ.
-          The ones you'll hit first:{' '}
-          <code>flex-col</code> → <code>direction-column</code>,{' '}
-          <code>items-center</code> → <code>align-center</code>,{' '}
-          <code>flex-wrap</code> → <code>wrap</code>,{' '}
-          <code>grid-cols-3</code> → <code>cols-3</code>.{' '}
-          <Link to="/docs/from-tailwind">Full comparison →</Link>
-        </div>
-      </div>
+      <Callout>
+        <strong>Coming from Tailwind?</strong>
+        Most utilities are identical, but a few layout names differ.
+        The ones you'll hit first:{' '}
+        <code>flex-col</code> → <code>direction-column</code>,{' '}
+        <code>items-center</code> → <code>align-center</code>,{' '}
+        <code>flex-wrap</code> → <code>wrap</code>,{' '}
+        <code>grid-cols-3</code> → <code>cols-3</code>.{' '}
+        <Link to="/docs/from-tailwind">Full comparison →</Link>
+      </Callout>
 
       <h2 id="step-1">1. Install</h2>
       <CodeBlock title="terminal">{`npm install beamcss @beamcss/vite`}</CodeBlock>
